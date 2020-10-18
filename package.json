@@ -1,10 +1,6 @@
 {
     "name": "scrabble",
     "type": "module",
-    "scripts": {
-        "start": "node server/index.js",
-        "lint": "eslint client/ server/"
-    },
     "devDependencies": {
         "eslint": "^7.11.0",
         "http-server": "^0.12.3"
