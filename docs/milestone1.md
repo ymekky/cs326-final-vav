@@ -16,6 +16,6 @@ Part 0: Data Interactions
 - obviously the process can be repeated, and users can edit their inputs for a different place/time/etc. 
 
 Part 1: Wireframes
-
+![very rough wireframe](../master/docs/rough_wireframe.png)
 
 Part 2: HTML and CSS
