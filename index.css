@@ -1,0 +1,55 @@
+
+h1 { 
+	text-align: center;
+	color: red;
+	font-size: 200% !important;
+}
+
+p {
+	text-align: left;
+	color: black;
+	font-size: 1.1em !important;
+}
+
+form {
+	background-color: #F5F5F5;
+	background-border: ;
+	height: 50%;
+	width: 20%;
+}
+
+body {
+	background-color: LavenderBlush !important;
+}
+
+.main {
+	background: url('files/bg.svg') no-repeat !important;
+}
+
+
+#top {
+	background-size: 100% 100%;
+	text-align: center;
+}
+
+.container {
+	width: 60%;
+	margin: 0px auto;
+}
+
+.details {
+	background-color: #F5F5F5;
+	background-border: ;
+	width: 60% !important;	
+	margin-top: 5% !important;
+}
+
+.btn-primary {
+	background-color: green !important;
+	border-color: green !important;
+}
+
+.center {
+    margin: 10% auto;
+    text-align: left;
+}
