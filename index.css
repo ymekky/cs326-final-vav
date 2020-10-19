@@ -13,13 +13,20 @@ p {
 
 form {
 	background-color: #F5F5F5;
-	background-border: ;
 	height: 50%;
 	width: 20%;
 }
 
 body {
 	background-color: LavenderBlush !important;
+}
+
+.row, .border {
+	border: 1px solid;
+}
+
+.no-border {
+	border: 0px solid;
 }
 
 .main {
