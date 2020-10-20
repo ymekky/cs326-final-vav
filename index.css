@@ -38,10 +38,10 @@ body {
 }
 
 .bg {
-	background: url('files/sue-rideshare-8-19jpg.jpeg') no-repeat !important;
+	background: url('files/bg.jpeg') no-repeat !important;
 	background-size: cover !important;
 	padding-top: 18.5% !important;
-	padding-bottom: 18.5% !important;
+	padding-bottom: 12% !important;
 }
 .row, .border {
 	border: 1px solid;
