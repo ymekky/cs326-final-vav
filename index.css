@@ -1,9 +1,18 @@
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 h1 { 
 	text-align: center;
-	color: red;
-	font-size: 200% !important;
+	color: black;
+	font-family: 'Archivo Black', sans-serif;
 }
+
+h2, h3, h4 {
+ font-family: 'Archivo Black', sans-serif;
+}
+
 
 p {
 	text-align: left;
@@ -18,9 +27,22 @@ form {
 }
 
 body {
-	background-color: LavenderBlush !important;
+	background-color: white !important;
+	/*font-family: 'Quicksand', sans-serif !important;*/
+	/*font-family: 'Archivo', sans-serif !important;*/
+	font-family: 'Judson', serif !important;
+}
+.logo {
+	font-size: 500% !important;
+	color: #0288d1 !important;
 }
 
+.bg {
+	background: url('files/sue-rideshare-8-19jpg.jpeg') no-repeat !important;
+	background-size: cover !important;
+	padding-top: 18.5% !important;
+	padding-bottom: 18.5% !important;
+}
 .row, .border {
 	border: 1px solid;
 }
@@ -29,24 +51,27 @@ body {
 	border: 0px solid;
 }
 
-.main {
-	background: url('files/bg.svg') no-repeat !important;
+.space-top{
+	margin-top: 2em !important;
 }
 
+.black {
+	background-color: black;
+}
 
 #top {
-	background-size: 100% 100%;
 	text-align: center;
 }
 
 .container {
-	width: 60%;
+	width: 100%;
 	margin: 0px auto;
+	border: 1px solid;
 }
 
 .details {
 	background-color: #F5F5F5;
-	background-border: ;
+	border: 1px solid;
 	width: 60% !important;	
 	margin-top: 5% !important;
 }
