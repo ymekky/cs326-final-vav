@@ -104,3 +104,8 @@ body {
     margin: 10% auto;
     text-align: left;
 }
+
+.profile-img{
+	height: 40px;
+	width: 40px;
+}
