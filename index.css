@@ -105,6 +105,14 @@ body {
     text-align: left;
 }
 
+.profile-img{
+	height: 40px;
+	width: 40px;
+}
+
+.td{
+	border-spacing: 0px;
+}
 .profile-img {
 	height: 40px;
 	width: 40px;
