@@ -52,8 +52,8 @@ body {
 }
 .row, .border {
 	/*border: 1px solid;*/
-}
 
+}
 .no-border {
 	border: 0px solid;
 }
@@ -101,3 +101,21 @@ body {
     margin: 10% auto;
     text-align: left;
 }
+
+.profile-img{
+	height: 40px;
+	width: 40px;
+}
+
+.tr{
+	border-spacing: 0px;
+}.profile-img {
+	height: 40px;
+	width: 40px;
+}
+
+.table-bestMatches {
+	border-color: #000000;
+	border-width: 20px;
+}
+
