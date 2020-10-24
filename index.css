@@ -47,8 +47,8 @@ body {
 .bg {
 	background: url('files/bg.jpeg') no-repeat !important;
 	background-size: cover !important;
-	padding-top: 18.5% !important;
-	padding-bottom: 12% !important;
+	padding-top: 17% !important;
+	padding-bottom: 10% !important;
 }
 .row, .border {
 	/*border: 1px solid;*/
@@ -78,9 +78,6 @@ body {
 	text-shadow: 2px 2px 4px #000000;
 }
 
-#top {
-	text-align: center;
-}
 
 .container {
 	width: 100%;
