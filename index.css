@@ -2,20 +2,19 @@
 ::-webkit-scrollbar {
   display: none;
 }
+body {
+	background-color: white !important;
+	font-family: 'Lato', sans-serif !important;
+	font-weight: 300 !important;
+}
 
 h1 { 
 	text-align: center;
-	color: black;
-	/*font-family: 'Archivo Black', sans-serif;*/
-	/*font-family: 'Lato', sans-serif !important;*/
 }
 
 h2, h3, h4,h5 {
- /*font-family: 'Archivo Black', sans-serif;*/
- /*font-family: 'Lato', sans-serif;*/
  font-weight: 300 !important;
 }
-
 
 p {
 	text-align: left;
@@ -28,16 +27,9 @@ form {
 	height: 50%;
 	width: 20%;
 }
+
 label{
 	margin: 1px !important;
-}
-body {
-	background-color: white !important;
-	/*font-family: 'Quicksand', sans-serif !important;*/
-	/*font-family: 'Archivo', sans-serif !important;*/
-	/*font-family: 'Judson', serif !important;*/
-	font-family: 'Lato', sans-serif !important;
-	font-weight: 300 !important;
 }
 
 a[href] {
@@ -48,6 +40,11 @@ a[href] {
 	height: 300px; 
 	width: auto;
 }
+
+.space-top{
+	margin-top: 2em !important;
+}
+
 .logo {
 	font-size: 510% !important;
 	color: #0288d1 !important;
@@ -58,14 +55,6 @@ a[href] {
 	background-size: cover !important;
 	padding-top: 17% !important;
 	padding-bottom: 10% !important;
-}
-.row, .border {
-	/*border: 1px solid;*/
-
-}
-
-.space-top{
-	margin-top: 2em !important;
 }
 
 .black-bg {
@@ -78,37 +67,33 @@ a[href] {
 	background-color: #eceff1 !important;
 }
 
-.blue-text {
-	color: #039be5;
-}
-
 .blue-bg {
 	background-color: #039be5;
-}
-
-.white-text {
-	color: white;
 }
 
 .white-bg {
 	background-color: white;
 }
 
-.shadow {
-	text-shadow: 2px 2px 4px #000000;
+.blue-text {
+	color: #039be5;
 }
 
+.white-text {
+	color: white;
+}
+
+.text-shadow {
+	text-shadow: 2px 2px 4px #000000;
+}
 
 .container {
 	width: 100%;
 	margin: 0px auto;
-	/*border: 1px solid;*/
 }
 
 .details {
-	/*border: 1px solid;*/
 	width: 60% !important;	
-	/*margin-top: 5% !important;*/
 }
 
 .btn-primary {
