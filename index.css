@@ -12,8 +12,8 @@ h1 {
 	text-align: center;
 }
 
-h2, h3, h4,h5 {
- font-weight: 300 !important;
+h2, h3, h4,h5,h6 {
+	font-weight: 300 !important;
 }
 
 p {
@@ -35,7 +35,9 @@ label{
 a[href] {
 	color: inherit;
 }
-
+.weight-300 {
+	font-weight: 300 !important;
+}
 .height-300 {
 	height: 300px; 
 	width: auto;
@@ -93,7 +95,7 @@ a[href] {
 }
 
 .details {
-	width: 60% !important;	
+	width: 60% !important;
 }
 
 .btn-primary {
@@ -101,9 +103,14 @@ a[href] {
 	border-color: green !important;
 }
 
-.center { /*centers div, left aligns text*/
+.center { /*vertically centers div, left aligns text*/
     margin: 10% auto;
     text-align: left;
+}
+
+.h-center {
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .profile-img{
