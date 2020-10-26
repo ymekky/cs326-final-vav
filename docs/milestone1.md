@@ -32,4 +32,4 @@ Part 2: HTML and CSS
 ![Chat](https://github.com/ymekky/cs326-final-vav/blob/main/docs/chat.png)
 
 Division of Labour:
-Alishba made the Matches page. Xiaowei made the Chat page. Yasmeen made the wireframes, the Main page, Login page, Register page, and Account page. 
+Alishba made the Matches page. Xiaowei made the Chat page. Yasmeen made the wireframes and the 4 other pages. 
