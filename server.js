@@ -17,7 +17,7 @@ function process(request, response, options) {
     parsed = url.parse(request.url, true); 
 
   if (parsed.pathname === "/user/new") {
-    dataStore[options.name] = {"name": options.name, "word": options.word, "score": options.score}
+    dataStore[options.name] = {"name": options.name, "email": options.word, "password": options.score}
 
     response.writeHead(200, headerText); 
     response.write(JSON.stringify({ key: options.name, action: "create" })); 
