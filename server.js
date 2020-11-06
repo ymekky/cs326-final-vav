@@ -1,54 +1,77 @@
 import {createServer} from 'http';
 import {parse} from 'url';
 import {join} from 'path';
-import {writeFile, readFileSync, existsSync} from 'fs';
+import {writeFile, readFileSync, existsSync, fstat} from 'fs';
 
-"use strict";
-
-const fs = require("fs"),
-  url = require("url"),
-  http = require("http");
-
-const dataFile = "datafile.json", 
-  port = 8080; 
-
-function process(request, response, options) {
-  const headerText = { "content-type": "text/json" }, 
-    parsed = url.parse(request.url, true); 
-
-  if (parsed.pathname === "/user/new") {
-    dataStore[options.name] = {"name": options.name, "word": options.word, "score": options.score}
-
-    response.writeHead(200, headerText); 
-    response.write(JSON.stringify({ key: options.name, action: "create" })); 
-    response.end(); 
-
-    fs.writeFile(dataFile, JSON.stringify(dataStore), err => {}); 
-    return; 
-  }
+let database;
+if (existsSync("database.json")) {
+    database = JSON.parse(readFileSync("database.json"));
+} else {
+    database = {
+        wordScores: [],
+        gameScores: []
+    };
 }
 
-  let dataStore = fs.existsSync(dataFile)
-  ? JSON.parse(fs.readFileSync(dataFile))
-  : {};
+createServer(async (req, res) => {
+    const parsed = parse(req.url, true);
 
-http
-  .createServer((request, response) => {
-    if (request.method === "GET") {
-      process(
-        request,
-        response,
-        url.parse(request.url, true).query 
-      );
+    if (parsed.pathname === '/user/new') {
+        let body = '';
+        req.on('data', data => body += data);
+        req.on('end', () => {
+            const data = JSON.parse(body);
+            database.wordScores.push({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+            });
+            
+            writeFile("database.json", JSON.stringify(database), err => {
+                if (err) {
+                    console.err(err);
+                } else res.end();
+            });
+        });
+    } else if (parsed.pathname === '/gameScore') {
+        let body = '';
+        req.on('data', data => body += data);
+        req.on('end', () => {
+            const data = JSON.parse(body);
+            database.gameScores.push({
+                name: data.name,
+                score: data.score
+            });
+            
+            writeFile("database.json", JSON.stringify(database), err => {
+                if (err) {
+                    console.err(err);
+                } else res.end();
+            });
+        });
     } else {
-      let requestBody = ""; 
+        // If the client did not request an API endpoint, we assume we need to fetch a file.
+        // This is terrible security-wise, since we don't check the file requested is in the same directory.
+        // This will do for our purposes.
+        const filename = parsed.pathname === '/' ? "index.html" : parsed.pathname.replace('/', '');
+        const path = join("client/", filename);
+        console.log("trying to serve " + path + "...");
+        if (existsSync(path)) {
+            if (filename.endsWith("html")) {
+                res.writeHead(200, {"Content-Type" : "text/html"});
+            } else if (filename.endsWith("css")) {
+                res.writeHead(200, {"Content-Type" : "text/css"});
+            } else if (filename.endsWith("js")) {
+                res.writeHead(200, {"Content-Type" : "text/javascript"});
+            } else {
+                res.writeHead(200);
+            }
 
-      request.on("data", data => {
-        requestBody += data; 
-      });
-      request.on("end", () => {
-        process(request, response, JSON.parse(requestBody)); 
-      });
+            res.write(readFileSync(path));
+            res.end();
+        } else {
+            res.writeHead(404);
+            res.end();
+        }
     }
-  })
-  .listen(port); 
+}).listen(8080);
