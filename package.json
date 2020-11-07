@@ -1,6 +1,5 @@
 {
     "name": "app",
-    "type": "module",
     "scripts": {
         "start": "node index.js",
         "lint": "eslint"
@@ -37,5 +36,9 @@
                 {}
             ]
         }
+    },
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1"
     }
 }
