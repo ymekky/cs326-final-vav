@@ -1,0 +1,134 @@
+
+::-webkit-scrollbar {
+  display: none;
+}
+body {
+	background-color: white !important;
+	font-family: 'Lato', sans-serif !important;
+	font-weight: 300 !important;
+}
+
+h1 { 
+	text-align: center;
+}
+
+h2, h3, h4,h5,h6 {
+	font-weight: 300 !important;
+}
+
+p {
+	text-align: left;
+	color: black;
+	font-size: 1.1em !important;
+}
+
+form {
+	background-color: #F5F5F5;
+	height: 50%;
+	width: 20%;
+}
+
+label{
+	margin: 1px !important;
+}
+
+a[href] {
+	color: inherit;
+	padding-left: 1em;
+}
+.weight-300 {
+	font-weight: 300 !important;
+}
+.height-300 {
+	height: 300px; 
+	width: auto;
+}
+
+.space-top{
+	margin-top: 2em !important;
+}
+
+.logo {
+	font-size: 510% !important;
+	color: #0288d1 !important;
+}
+
+.bg {
+	background: url('files/bg.jpeg') no-repeat !important;
+	background-size: cover !important;
+	padding-top: 17% !important;
+	padding-bottom: 10% !important;
+}
+
+.black-bg {
+	background-color: black;
+}
+.dark-grey-bg {
+	background-color: #4B515D;
+}
+.light-grey-bg {
+	background-color: #eceff1 !important;
+}
+
+.blue-bg {
+	background-color: #039be5;
+}
+
+.white-bg {
+	background-color: white;
+}
+
+.blue-text {
+	color: #039be5;
+}
+
+.white-text {
+	color: white;
+}
+
+.text-shadow {
+	text-shadow: 2px 2px 4px #000000;
+}
+
+.container {
+	width: 100%;
+	margin: 0px auto;
+}
+
+.details {
+	width: 60% !important;
+}
+
+.btn-primary {
+	background-color: green !important;
+	border-color: green !important;
+}
+
+.center { /*vertically centers div, left aligns text*/
+    margin: 10% auto;
+    text-align: left;
+}
+
+.h-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.profile-img{
+	height: 40px;
+	width: 40px;
+}
+
+.tr{
+	border-spacing: 0px;
+}.profile-img {
+	height: 40px;
+	width: 40px;
+}
+
+.table-bestMatches {
+	border-color: #000000;
+	border-width: 20px;
+}
+
+
