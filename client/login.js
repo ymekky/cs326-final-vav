@@ -1,0 +1,19 @@
+window.addEventListener("load", async function() {
+	document.getElementById("login-click").addEventListener('click', async function () {
+		const email = document.getElementById("email").value;
+		//console.log(email);
+		const password = document.getElementById("password").value;
+
+
+	    const response = await fetch(`./login?email=${email}&password=${password}`);
+		
+	    if (!response.ok) {
+	        console.error("Could not login.");
+	    }
+	    else {
+	    	const user = await response.json();
+	    	window.localStorage.setItem("logged-in", true);
+	    	window.localStorage.setItem("me",JSON.stringify(user.me));
+	    }
+	});
+});
