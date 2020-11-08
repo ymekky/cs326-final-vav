@@ -8,7 +8,8 @@ const utils = require('./database');
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(express.static(__dirname));
+//.use(express.static(__dirname));
+app.use('/', express.static('client'));
 //app.get('/', (req, res) => {res.sendFile(path.join(__dirname + '/index.html'))});
 const port = 8000;
 
@@ -248,6 +249,30 @@ app.post('/user/new', (req, res) => {
     });
     console.log(`Set ${id} to ${name}, body = ${JSON.stringify(req.body)}`);
     res.send('Set.');
+});
+
+// login?email=jdoe@umass.edu&password=123
+app.get('/login', (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
+    
+    for(let user in database.Users){
+        //console.log(email);
+        //console.log(database.Users[user].email);
+        if(email === database.Users[user].email) { //might not work 
+            //TODO
+            if(parseInt(password) === parseInt(database.Users[user].password)) {
+                res.send({me: database.Users[user]});
+                //console.log(`user_id:${database.Users[user].id}`);
+                break;
+            }
+            else {
+                res.status(404).send('Wrong Password');
+            }
+        }
+    }
+    //add if user doesnt exist
+    //res.send({"email":email});
 });
 
 app.listen(port, () => {
