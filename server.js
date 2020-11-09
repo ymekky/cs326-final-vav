@@ -4,13 +4,20 @@ const app = express();
 const bodyParser  = require('body-parser');
 const path = require('path');
 const utils = require('./database');
+const cors = require('cors');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
-//.use(express.static(__dirname));
+app.use(cors());
 app.use('/', express.static('client'));
-//app.get('/', (req, res) => {res.sendFile(path.join(__dirname + '/index.html'))});
+app.get('/', (req, res) => {res.sendFile(path.join(__dirname + '/client/index.html'))});
+app.get('/loginpage', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/login.html'));
+})
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/register.html'));
+})
+//.use(express.static(__dirname));
 const port = 8000;
 
 let database;
@@ -23,9 +30,7 @@ if (fs.existsSync("database.json")) {
     };
 }
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-});
+
 //   curl -d '{ "value" : "12" }' -H "Content-Type: application/json" http://localhost:3000/read/x
 app.get('/user', (req, res) => {
     const k = req.query.USERID;
@@ -248,31 +253,36 @@ app.post('/user/new', (req, res) => {
             console.err(err);}
     });
     console.log(`Set ${id} to ${name}, body = ${JSON.stringify(req.body)}`);
-    res.send('Set.');
+    res.send({'success':true})
 });
 
 // login?email=jdoe@umass.edu&password=123
 app.get('/login', (req, res) => {
+    console.log("im here");
     const email = req.query.email;
+    console.log('email', email);
     const password = req.query.password;
     
-    for(let user in database.Users){
+    for(let user in database.Users){ 
+        console.log("user", user);
         //console.log(email);
-        //console.log(database.Users[user].email);
+        console.log(database.Users[user].email);
         if(email === database.Users[user].email) { //might not work 
             //TODO
-            if(parseInt(password) === parseInt(database.Users[user].password)) {
-                res.send({me: database.Users[user]});
-                //console.log(`user_id:${database.Users[user].id}`);
+            if(password === database.Users[user].password) {
+                console.log('password correct')
+                console.log(`user_id:${database.Users[user].id}`);
+                res.json({me: database.Users[user]});
                 break;
             }
             else {
-                res.status(404).send('Wrong Password');
+                console.log('here')
+                res.send('Wrong Password');
             }
         }
     }
     //add if user doesnt exist
-    //res.send({"email":email});
+    // res.send({"email":email});
 });
 
 app.listen(port, () => {
