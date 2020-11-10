@@ -3,6 +3,8 @@ window.addEventListener("load", async function() {
 	document.getElementById("email").placeholder = JSON.parse(window.localStorage.getItem("me")).email;
 	document.getElementById("password").placeholder = JSON.parse(window.localStorage.getItem("me")).password;
 
-	document.getElementById("login-click").addEventListener('click', async function () {
+	document.getElementById("logout").addEventListener('click', function () {
+		window.localStorage.setItem("logged-in", false);
+		window.location.replace('./index.html')
 	});
 });
