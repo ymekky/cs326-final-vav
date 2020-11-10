@@ -1,21 +1,16 @@
 window.addEventListener("load", async function() {
-	document.getElementById("login-click").addEventListener('click', async function () {
-		const email = document.getElementById("email").value;
-		//console.log(email);
-		const password = document.getElementById("password").value;
+	document.getElementById('sel1').onchange = () => {
+		if(document.getElementById('sel1').value === 'looking for a rider') {
+			document.getElementById('sel2-label').innerHTML = '';
+			document.getElementById('sel2-label').innerHTML = 'Where will you leave from?';
+		}
+		else {
+			document.getElementById('sel2-label').innerHTML = '';
+			document.getElementById('sel2-label').innerHTML = 'Where do you want to leave from?';	
+		}
+	}; 
 
-
-	    const response = await fetch(`./login?email=${email}&password=${password}`);
-			console.log('response', response)
-	    if (!response.ok) {
-	        console.error("Could not login.");
-	    }
-	    else {
-				const user = await response.json();
-				console.log('user successfully logged in', user)
-	    	window.localStorage.setItem("logged-in", true);
-				window.localStorage.setItem("me",JSON.stringify(user.me));
-				window.location.replace('./account.html')
-	    }
+	document.getElementById('search-click').addEventListener('click', () => {
+		window.location.replace('bestMatches.html');
 	});
 });
