@@ -17,6 +17,9 @@ app.get('/loginpage', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/register.html'));
 })
+app.get('/account', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/account.html'));
+})
 //.use(express.static(__dirname));
 const port = 8000;
 
@@ -267,7 +270,7 @@ app.get('/login', (req, res) => {
         console.log("user", user);
         //console.log(email);
         console.log(database.Users[user].email);
-        if(email === database.Users[user].email) { //might not work 
+        if(email === database.Users[user].email) { 
             //TODO
             if(password === database.Users[user].password) {
                 console.log('password correct')
