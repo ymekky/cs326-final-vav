@@ -43,7 +43,34 @@ app.get('/user', (req, res) => {
     res.send('Set.');
 });
 
-// /user/rides/pending?user_id=12&ride_id=702
+// /user/rides/view?user_id=12
+app.get('/user/rides/view', (req, res) => {
+
+    let my_rides = {};
+
+/*
+    for(let ride in database.Rides) {
+        //console.log(database.Rides[ride]);
+        //console.log(ride_id);
+        if (parseInt(database.Rides[ride].id) === ride_id) {
+            my_ride = database.Rides[ride];
+        }
+    }
+    for(let user in database.Users){
+        if(parseInt(database.Users[user].id) === user_id) {
+            res.json({"rides" : database.Users[user]["Rides"]});
+        }
+    }
+*/
+//fake
+    res.json({"active": {"id":232,"date":"12/11/2020","time":"2:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 72,'name': "John Smith", "email":"johnsmith@umass.edu"}},
+            "pending": [{"id":280,"date":"12/11/2020","time":"5:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 83,'name': "Jane Smith", "email":"jsmith@umass.edu"}},
+                        {"id":281,"date":"13/11/2020","time":"2:30PM","starting":"UMASS","destination":"Boston Logan Airport","driver": {'id': 281,'name': "Jane Doe", "email":"jdoe@umass.edu"}}],
+            "completed": [{"id":1719,"date":"01/09/2020","time":"1:00AM","destination":"UMASS","starting":"Boston Logan Airport", "driver":{'id': 72,'name': "John Smith","email":"johnsmith@umass.edu"}}],
+            "cancelled": []});
+});
+
+// /user/rides/pending?user_id=12&ride_id=702 //searching
 app.get('/user/rides/pending', (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
@@ -72,7 +99,7 @@ app.get('/user/rides/pending', (req, res) => {
     res.send(`Added ride ${ride_id} to ${user_id}'s pending rides`);
 });
 
-// /user/rides/active?user_id=12&ride_id=702
+// /user/rides/active?user_id=12&ride_id=702  //request accepted
 app.get('/user/rides/active', (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
@@ -113,7 +140,7 @@ app.get('/user/rides/active', (req, res) => {
     res.send(`Added ride ${ride_id} to ${user_id}'s active rides`);
 });
 
-// /user/rides/completed?user_id=12&ride_id=702
+// /user/rides/completed?user_id=12&ride_id=702 //done 
 app.get('/user/rides/completed', (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);

@@ -40,30 +40,21 @@
                     <input class="form-control" type="text" placeholder="*****" id="password" readonly>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col">
-                    <h6>Current request:</h6>
-                    None.
-                </div>
-                <div class="form-group col">
-                    <h6>Current ride:</h6>
-                    Confirmed ride with Jane Smith.
-                    <br>
-                    Date: 11/02/2020
-                    <br>
-                    Time: 2:30 PM
-                    <br>
-                    UMASS to BOSTON LOGAN AIRPORT
-                </div>
+
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-current-tab" data-toggle="tab" role="tab" aria-controls="nav-current" aria-selected="true">Current</a>
+                <a class="nav-item nav-link" id="nav-request-tab" data-toggle="tab" role="tab" aria-controls="nav-request" aria-selected="false">Requested</a>
+                <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" role="tab" aria-controls="nav-past" aria-selected="false">Completed</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="active-rides" role="tabpanel" aria-labelledby="nav-current-tab"></div>
+              <div class="tab-pane fade" id="requested" role="tabpanel" aria-labelledby="nav-request-tab"></div>
+              <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="nav-past-tab"></div>
             </div>
-            <div class="form-row">
-                <div class="form-group col text-center">
-                    <button type="submit" class="btn btn-primary">EDIT</button>
-                </div>
-                <div class="form-group col text-center">
-                    <button type="submit" class="btn btn-danger">CANCEL</button>
-                </div>
-            </div>
+
+            <br>
             <div class="form-row">
                 <h6>Requests:</h6>
             </div>

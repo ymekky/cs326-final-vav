@@ -1,11 +1,15 @@
 window.addEventListener('load', async function () {
 	document.getElementById("account-link").onclick = () => {
-		if (window.localStorage.getItem("logged-in") === null) {
+		if (window.localStorage.getItem("logged-in") === null || window.localStorage.getItem("logged-in") === "false") {
 			document.getElementById("account-link").href = "/login.html"; 
 		}
 		else {
 			document.getElementById("account-link").href = "/account.html";
 		}
 	}
+
+	document.getElementById("find-ride").addEventListener('click', () => {
+		window.location.replace('/info.html')
+	});
 
 });
