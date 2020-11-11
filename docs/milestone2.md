@@ -11,7 +11,8 @@ ID
 Name
 Email
 Password
-Rides: {Active: , Pending: [], Completed: []} 
+Rides: {Active: , Pending: [], Completed: []}
+Notifications: []
 
 
 Ride Objects
@@ -38,3 +39,7 @@ API ENDPOINTS
 
 /ride/new                         makes new Ride Object
 /ride/delete                      deletes Ride Object from database (when driver cancels)
+/rides/view						  gets all rides in database
+
+/notify
+/notifs
