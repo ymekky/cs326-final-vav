@@ -11,11 +11,7 @@ h1 {
   text-align: center;
 }
 
-h2,
-h3,
-h4,
-h5,
-h6 {
+h2, h3, h4, h5, h6 {
   font-weight: 300 !important;
 }
 
@@ -138,4 +134,10 @@ a[href] {
 
 .show {
   display: block !important;
+}
+
+.table-rides {
+  table-layout: fixed;
+  width: 100%;
+  word-wrap: break-word;
 }

@@ -9,7 +9,13 @@ window.addEventListener('load', async function () {
 	}
 
 	document.getElementById("find-ride").addEventListener('click', () => {
-		window.location.replace('/info.html')
+		window.location.replace('/info.html');
+		if (window.localStorage.getItem("logged-in") !== null || window.localStorage.getItem("logged-in") !== "false") {
+			window.location.replace('/info.html');
+		}
+		else {
+			alert("You must be logged in.");
+		}
 	});
 
 });

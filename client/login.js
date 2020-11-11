@@ -1,7 +1,6 @@
 window.addEventListener("load", async function() {
 	document.getElementById("login-click").addEventListener('click', async function () {
 		const email = document.getElementById("email").value;
-		//console.log(email);
 		const password = document.getElementById("password").value;
 
 
@@ -13,7 +12,7 @@ window.addEventListener("load", async function() {
 	    else {
 				const user = await response.json();
 				console.log('user successfully logged in', user)
-	    	window.localStorage.setItem("logged-in", true);
+	    		window.localStorage.setItem("logged-in", true);
 				window.localStorage.setItem("me",JSON.stringify(user.me));
 				window.location.replace('./account.html')
 	    }

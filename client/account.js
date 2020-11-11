@@ -39,8 +39,7 @@ window.addEventListener("load", async function() {
 		document.getElementById("requested").className = "tab-pane fade";
 	});
 
-    const response = await fetch(`./user/rides/view?user_id=${user_id}`);
-		console.log('response', response)
+    const response = await fetch(`./user/rides/view?user_id=${user_id}`); //change
     if (!response.ok) {
         console.error("Could not view rides.");
     }
@@ -112,6 +111,27 @@ window.addEventListener("load", async function() {
 				build(table,tb,ride);
 			}
 			table.appendChild(tb);
+    }
+
+    const notifs = await fetch('./notifs?id=' + JSON.stringify(JSON.parse(window.localStorage.getItem('me')).id));
+ 
+    if (!notifs.ok) {
+        console.error("Could not get notificaitons.");
+    }else {
+    	const res = await notifs.json();
+    	const br = document.createElement('br');
+    	const requests = document.getElementById('notifications');
+
+		for(let notif of res.notifications) {
+			let btn = document.createElement('button');
+			btn.className += "btn btn-outline-primary";
+			btn.innerHTML = notif.name;
+			btn.appendChild(br);
+			btn.innerHTML += notif.email;
+			requests.appendChild(btn);
+
+		}
+    	
     }
 });
 
