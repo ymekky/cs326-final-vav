@@ -21,7 +21,8 @@ app.get('/account', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/account.html'));
 })
 //.use(express.static(__dirname));
-const port = 8000;
+const port = process.env.PORT || 8080.
+;
 
 let database;
 if (fs.existsSync("database.json")) {
