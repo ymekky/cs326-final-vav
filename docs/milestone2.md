@@ -1,6 +1,8 @@
 Milestone 2
 
-Defintions:
+Heroku Link: https://enigmatic-garden-25331.herokuapp.com/
+
+Definitions:
 Active: Ride has been accepted by driver User 
 Pending: User requested Ride, but driver User is yet to accept
 Completed: Ride was completed 
