@@ -45,5 +45,5 @@ API ENDPOINTS
 /ride/delete                      deletes Ride Object from database (when driver cancels) (/ride/delete?ride_id=702)
 /rides/view						            gets all rides in database (user/ride/view?date=11/20/2020&time=5:30pm&name=jane doe&starting=umass&destination=bostan                                               logan&driver=sara jane&id=700&date=12/12/2012&time=8:30am&name=John Doe&starting=jfk&destination=umass&driver=sara smith)
 
-/notify                           notifies the id of the user that is notifying the other user (/notify?from=123&to=321)
-/notifs                           notfies the user of incoming messages (/notifs?id=321)
+/notify                           the key name part of the notification ({"notifications" :[]}
+/notifs                           the message body of the notification (notification: "i'm here")
