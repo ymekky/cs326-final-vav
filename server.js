@@ -35,18 +35,8 @@ if (fs.existsSync("database.json")) {
 }
 
 
-//   curl -d '{ "value" : "12" }' -H "Content-Type: application/json" http://localhost:3000/read/x
-app.get('/user', (req, res) => {
-    const k = req.query.USERID;
-    const v = req.query.name;
-    datastore[k] = v;
-    console.log(`Set ${k} to ${v}`);
-    res.send('Set.');
-});
-
 // /user/rides/view?user_id=12
 app.get('/user/rides/view', (req, res) => {
-
     let my_rides = {};
 
 /*

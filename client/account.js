@@ -1,7 +1,7 @@
 window.addEventListener("load", async function() {
 	document.getElementById("name").placeholder = JSON.parse(window.localStorage.getItem("me")).name;
 	document.getElementById("email").placeholder = JSON.parse(window.localStorage.getItem("me")).email;
-	document.getElementById("password").placeholder = JSON.parse(window.localStorage.getItem("me")).password;
+	document.getElementById("password").value = JSON.parse(window.localStorage.getItem("me")).password;
 	const user_id = JSON.parse(window.localStorage.getItem("me")).id;
 
 	document.getElementById("logout").addEventListener('click', function () {
@@ -46,13 +46,11 @@ window.addEventListener("load", async function() {
     else {
 			const rides = await response.json();
 
+			const _br = document.createElement('br');
+
 			//BUILIDING PENDING (REQUESTED) RIDES
 			//-----------------------------------------------
 			let table = document.getElementById('requested');
-			//let header = document.createElement('h6');
-			//header.innerText = "Requested:"
-			//table.appendChild(header);
-
 			let tb = document.createElement('table');
 			tb.className += " " + "table-bordered" + " " + "table-rides";
 
@@ -68,10 +66,6 @@ window.addEventListener("load", async function() {
 			//-----------------------------------------------
 
 			table = document.getElementById('active-rides');
-			//header = document.createElement('h6');
-			//header.innerText = "Current Rides:"
-			//table.appendChild(header);
-
 			tb = document.createElement('table');
 			tb.className += " " + "table-bordered" + " " + "table-rides";
 
@@ -89,6 +83,7 @@ window.addEventListener("load", async function() {
 			button.className += "btn btn-danger";
 			button.innerHTML = "CANCEL";
 
+			innerDiv.appendChild(_br);
 			innerDiv.appendChild(button);
 			outerDiv.appendChild(innerDiv);
 			table.appendChild(outerDiv);
@@ -98,10 +93,6 @@ window.addEventListener("load", async function() {
 			//BUILDING COMPLETED RIDES
 			//-----------------------------------------------
 			table = document.getElementById('completed');
-			//header = document.createElement('h6');
-			//header.innerText = "Completed Rides:"
-			//table.appendChild(header);
-
 			tb = document.createElement('table');
 			tb.className += " " + "table-bordered" + " " + "table-rides";
 

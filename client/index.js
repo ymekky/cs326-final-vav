@@ -1,6 +1,17 @@
 window.addEventListener('load', async function () {
+	let logged = (window.localStorage.getItem("logged-in") !== null && window.localStorage.getItem("logged-in") !== "false");
+
+	if (!logged) {
+		document.getElementById("account-link").innerText= "Login";
+		document.getElementById("register").href = "/register.html"; 
+	}
+	else {
+		document.getElementById("account-link").innerText= "My account";
+		document.getElementById("register").href = "#"; 
+	}
+
 	document.getElementById("account-link").onclick = () => {
-		if (window.localStorage.getItem("logged-in") === null || window.localStorage.getItem("logged-in") === "false") {
+		if (!logged) {
 			document.getElementById("account-link").href = "/login.html"; 
 		}
 		else {
@@ -9,12 +20,17 @@ window.addEventListener('load', async function () {
 	}
 
 	document.getElementById("find-ride").addEventListener('click', () => {
-		window.location.replace('/info.html');
-		if (window.localStorage.getItem("logged-in") !== null || window.localStorage.getItem("logged-in") !== "false") {
+		if (logged) {
 			window.location.replace('/info.html');
 		}
 		else {
 			alert("You must be logged in.");
+		}
+	});
+
+	document.getElementById("register").addEventListener('click', () => {
+		if(logged) {
+			alert("You already have an account!");
 		}
 	});
 
