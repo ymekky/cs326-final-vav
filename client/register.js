@@ -5,6 +5,7 @@ window.addEventListener("load", async function() {
 		const name = document.getElementById("name").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
         const id = Math.floor(Math.random() * 1000)
+
         if(password == confirmPassword){
           const response = await fetch(`./user/new`, {
             headers: {
@@ -12,22 +13,22 @@ window.addEventListener("load", async function() {
               'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify({email, password, name, id})
+            body: JSON.stringify({email, password, name})
           }); console.log('response', response)
           if (!response.ok) {
               console.error("Could not register.");
           }
           else {
-            const res = await response.json();
-            if (res.success === true) {
+            const user = await response.json();
+            if (user.success === true) {
               window.localStorage.setItem("logged-in", true);
-              window.localStorage.setItem("me",JSON.stringify({id, name, email, password, Rides: {}, Chatters: []}));
+              window.localStorage.setItem("me",JSON.stringify(user.me));
               window.location.replace('./account')
             }
             console.log('User Successfully Created', user)
           }
         }
-        else{
+        else {
           document.getElementById('error').addClass('show');
           console.log("Passwords don't match! try again");
         }

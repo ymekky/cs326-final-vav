@@ -5,12 +5,12 @@ window.addEventListener("load", async function() {
 
 
 	    const response = await fetch(`./login?email=${email}&password=${password}`);
-			console.log('response', response)
+	    const user = await response.json();
 	    if (!response.ok) {
-	        console.error("Could not login.");
+	        console.error(user.error);
+	        alert(user.error);
 	    }
 	    else {
-				const user = await response.json();
 				console.log('user successfully logged in', user)
 	    		window.localStorage.setItem("logged-in", true);
 				window.localStorage.setItem("me",JSON.stringify(user.me));
