@@ -2,6 +2,16 @@
 
 Heroku Link: https://enigmatic-garden-25331.herokuapp.com/
 
+Division of Labor: 
+Server.js = Yasmeen and Alishba 
+Account.js = Yasmeen
+Info.js = Yasmeen
+Best Matches.js = Yasmeen
+Register.js = Alishba
+Register.html = Alishba
+Login.js = Alishba 
+API = Alishba and Yasmeen
+
 Definitions:
 Active: Ride has been accepted by driver User 
 Pending: User requested Ride, but driver User is yet to accept
