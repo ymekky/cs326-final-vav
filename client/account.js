@@ -2,7 +2,7 @@ window.addEventListener("load", async function() {
 	document.getElementById("name").placeholder = JSON.parse(window.localStorage.getItem("me")).name;
 	document.getElementById("email").placeholder = JSON.parse(window.localStorage.getItem("me")).email;
 	document.getElementById("password").value = JSON.parse(window.localStorage.getItem("me")).password;
-	const user_id = JSON.parse(window.localStorage.getItem("me")).id;
+	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
 
 	document.getElementById("logout").addEventListener('click', function () {
 		window.localStorage.setItem("logged-in", false);
@@ -104,21 +104,21 @@ window.addEventListener("load", async function() {
 			table.appendChild(tb);
     }
 
-    const notifs = await fetch('./notifs?id=' + JSON.stringify(JSON.parse(window.localStorage.getItem('me')).id));
+    const notifs = await fetch('./notifs?id=' + JSON.parse(window.localStorage.getItem('me'))._id);
  
     if (!notifs.ok) {
         console.error("Could not get notificaitons.");
     }else {
-    	const res = await notifs.json();
+    	const notifications = await notifs.json();
     	const br = document.createElement('br');
     	const requests = document.getElementById('notifications');
-
-		for(let notif of res.notifications) {
+			console.log(notifications);
+		for(let notif of notifications) {
 			let btn = document.createElement('button');
 			btn.className += "btn btn-outline-primary";
-			btn.innerHTML = notif.name;
+			btn.innerHTML = notif.driver.name;
 			btn.appendChild(br);
-			btn.innerHTML += notif.email;
+			btn.innerHTML += notif.driver.email;
 			requests.appendChild(btn);
 
 		}

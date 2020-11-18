@@ -14,7 +14,9 @@ window.addEventListener("load", async function() {
 		if(document.getElementById('sel1').value === 'looking for a driver') {
 			const date = document.getElementById('date').value;
 			const time = document.getElementById('time').value;
-			window.localStorage.setItem('search',JSON.stringify({"date": date,"time": time}));
+			const from = document.getElementById('from').value;
+			const to = document.getElementById('to').value;
+			window.localStorage.setItem('search',JSON.stringify({from, to, date, time}));
 			window.location.replace('bestMatches.html');
 		}
 		else{
@@ -27,9 +29,9 @@ window.addEventListener("load", async function() {
 				      },
 				      body: JSON.stringify({"date": document.getElementById('date').value,
 				      						"time": document.getElementById('time').value + document.getElementById('PM').value,
-				      						"starting": document.getElementById('sel2').value,
-				      						"destination": document.getElementById('sel3').value, 
-				      						"driver": {'id': user.id,'name': user.name, "email":user.email},
+				      						"starting": document.getElementById('from').value,
+				      						"destination": document.getElementById('to').value, 
+				      						"driver": {'id': user._id,'name': user.name, "email":user.email},
 				      						"id": Math.random(1000)})//ride id, change to randomize
 				    });
 

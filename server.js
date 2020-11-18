@@ -22,10 +22,13 @@ if (!process.env.URI) {
     uri = process.env.URI;
 }
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId; 
 MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(client => {
     const db = client.db('umass-ride');
     const user_collection = db.collection('users');
-    const ride_collection = db.collection('ride'); 
+    const rides_collection = db.collection('rides'); 
+    const driver_collection = db.collection('drivers'); 
+    const notifications_collection = db.collection('notifications');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -48,7 +51,8 @@ if (fs.existsSync("database.json")) {
 } else {
     database = {
         Users: [],
-        Rides: []
+        Rides: [],
+        Drivers: []
     };
 }
 
@@ -226,38 +230,39 @@ app.get('/user/rides/delete', (req, res) => {
     res.send(`Added ride ${ride_id} to ${user_id}'s completed rides`);
 });
 
-//   curl -d '{ "user_id" : "123", "ride_id" : "232", "date": "12/02/2020", "time": "2:30PM","name":"JSJ"}' -H "Content-Type: application/json" http://localhost:3000/ride/new
-app.post('/ride/new', (req, res) => {
-    //const user_id = req.body["user_id"];
-    //console.log(req.body);
-    const ride_id = req.body["id"];
+//   curl -d '{ "user_id" : "123", "ride_id" : "232", "date": "12/02/2020", "time": "2:30PM","name":"JSJ"}' -H "Content-Type: application/json" http://localhost:3000/346
+app.post('/ride/new', async (req, res) => {
+    
+    const user_id = req.body["user_id"];
     const date = req.body["date"];
     const time = req.body["time"];
-    const name = req.body["name"];
-    const starting = req.body["starting"];
-    const destination = req.body["destination"];
-    const driver = req.body["driver"];
-    if(!database.Rides) {
-        database.Rides = [];
-    }
-    database.Rides.push({
-        id: ride_id,
+    const from = req.body["from"];
+    const to = req.body["to"];
+    const driver_id = req.body["driver_id"];
+    const ride = {
         date: date,
         time: time,
-        starting: starting,
-        destination: destination,
-        driver: driver
-    });
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
+        to: to,
+        from: from,
+        driver_id: driver_id,
+        user_id: user_id
+    }
+    console.log('Ride: ', ride)
+    const returnedRide = await rides_collection.insertOne(ride)
+   
     //console.log(`Created ride ${ride_id} with driver ${user_id}`);
-    res.send('Set.');
+    res.send({success: true});
+});
+
+
+app.get('/drivers', async (req, res) => {
+    const drivers = await driver_collection.find({}).toArray();
+    console.log('Drivers: ', drivers);
+    res.json(drivers);
 });
 
 // ride/delete?ride_id=702
-app.get('ride/delete', (req, res) => {
+app.get('/ride/delete', (req, res) => {
     const ride_id = parseInt(req.query.ride_id);
 
     let my_ride = {};
@@ -283,14 +288,15 @@ app.get('ride/delete', (req, res) => {
 });
 
 //available rides
-app.get('/rides/view', (req, res) => {
-    const rides = [];//[{"id":280,"date":"12/11/2020","time":"5:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 83,'name': "Jane Smith", "email":"jsmith@umass.edu"}}]; 
-    rides.push({"id":700,"date":"12/11/2020","time":"1:00PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 172,'name': "Sarah Joe", "email":"sjoe@umass.edu"}});
-    for(let ride of database.Rides){
-        rides.push(ride);
-    }
-    res.json({available: rides});
-});
+// app.get('/rides/view', (req, res) => {
+//     // const rides = [];//[{"id":280,"date":"12/11/2020","time":"5:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 83,'name': "Jane Smith", "email":"jsmith@umass.edu"}}]; 
+//     // rides.push({"id":700,"date":"12/11/2020","time":"1:00PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 172,'name': "Sarah Joe", "email":"sjoe@umass.edu"}});
+//     // for(let ride of database.Rides){
+//     //     rides.push(ride);
+//     // }
+//     // res.json({available: rides});
+    
+// });
   
 //   curl -d '{ "id" : "123", "name" : "jane doe", "email": "jdoe@umass.edu", "password": "123"}' -H "Content-Type: application/json" http://localhost:8000/user/new
 app.post('/user/new', (req, res) => {
@@ -338,47 +344,47 @@ app.get('/login', async function(req, res) {
 });
 
 // /notify?from=123&to=321
-app.get('/notify', (req, res) => {
+app.get('/notify', async (req, res) => {
     const from = req.query.from;
     const to = req.query.to;
-    let me = {};
+    const driverMessage = 'A person has requested a ride.';
+    const riderMessage = 'Your ride has been requested and your driver has been notified.';
+    
+    const driverNotification = {
+        from,
+        to,
+        message: driverMessage
+    };
+    const riderNotification = {
+        from: to,
+        to: from,
+        message: riderMessage
+    };
 
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === parseInt(from)) {
-            me = database.Users[user];
-        }
-    }
+ 
+    const notification1 = await  notifications_collection.insertOne(driverNotification);
+    const notification2 = await  notifications_collection.insertOne(riderNotification);
 
-    for(let user in database.Users){
-        //console.log(parseInt(database.Users[user].id));
-        //console.log(parseInt(to));
-        if(parseInt(database.Users[user].id) === parseInt(to)) {
-            if(!database.Users[user]["notifications"]) {
-                database.Users[user]["notifications"] = [];
-            }
-            database.Users[user]["notifications"].push({"name": me.name, "id": me.id, "email": me.email});
-            //console.log(database.Users[user]["notifications"]);
-            fs.writeFile("database.json", JSON.stringify(database), err => {
-                if (err) {
-                    console.err(err);}
-            });
-        }
-    }
-    res.send('Set.');
+    res.send({success: true});
 });
-// /notifs?id=321
-app.get('/notifs', (req, res) => {
-    const user_id = req.query.id;
 
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === parseInt(user_id)) {
-            //console.log("here");
-            if(!database.Users[user].notifications ||  database.Users[user].notifications.length === 0){
-                res.send('None');
-                break;
-            }
-            res.json({"notifications": database.Users[user].notifications});
+// /notifs?id=321
+app.get('/notifs', async (req, res) => {
+    const user_id = req.query.id;
+    console.log(user_id);
+    try {
+        const notifications = await notifications_collection.find({to: user_id}).toArray();
+        console.log('For jay: ', notifications);
+        for (notification of notifications) {
+            console.log(notification.from);
+            const driver = await driver_collection.findOne({_id: new ObjectId(notification.from)});
+            console.log('Driver information', driver);
+            notification.driver = driver;
+            res.json(notifications);
         }
+
+    } catch(err) {
+        res.json({success: false, error: 'Error grabbing notifications'})
     }
 });
 
