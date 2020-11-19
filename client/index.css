@@ -1,6 +1,7 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
 body {
   background-color: white !important;
   font-family: "Lato", sans-serif !important;

@@ -16,6 +16,9 @@ window.addEventListener("load", async function() {
             body: JSON.stringify({email, password, name})
           }); console.log('response', response)
           if (!response.ok) {
+              if(response.status === 403){
+                alert("This email already exists.");
+              }
               console.error("Could not register.");
           }
           else {

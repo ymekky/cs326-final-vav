@@ -44,7 +44,7 @@ window.addEventListener("load", async function() {
         console.error("Could not view rides.");
     }
     else {
-			const rides = await response.json();
+			let rides = await response.json();
 
 			const _br = document.createElement('br');
 
@@ -56,8 +56,10 @@ window.addEventListener("load", async function() {
 
 			initialize(table, tb);
 
-			for(let ride of rides.pending) {
-				build(table,tb,ride);
+			if(rides.pending !== undefined) {
+				for(let ride of rides.pending) {
+					build(table,tb,ride);
+				}
 			}
 			table.appendChild(tb);
 			//-----------------------------------------------
@@ -71,22 +73,12 @@ window.addEventListener("load", async function() {
 
 			initialize(table, tb);
 
-			let ride = rides.active; 
-			build(table,tb,ride);
+			if(rides.active !== undefined) {
+				for(let ride of rides.active) {
+					build(table,tb,ride);
+				}
+			}
 			table.appendChild(tb);
-
-			let outerDiv = document.createElement('div');
-			outerDiv.className += " " + "form-row";
-			let innerDiv = document.createElement("div");
-			innerDiv.className += "col text-center";
-			let button = document.createElement('button');
-			button.className += "btn btn-danger";
-			button.innerHTML = "CANCEL";
-
-			innerDiv.appendChild(_br);
-			innerDiv.appendChild(button);
-			outerDiv.appendChild(innerDiv);
-			table.appendChild(outerDiv);
 
 			//-----------------------------------------------
 
@@ -98,36 +90,56 @@ window.addEventListener("load", async function() {
 
 			initialize(table, tb);
 
-			for(let ride of rides.completed) {
-				build(table,tb,ride);
+			if(rides.completed !== undefined) {
+				for(let ride of rides.completed) {
+					build(table,tb,ride);
+				}
 			}
 			table.appendChild(tb);
     }
 
-    const notifs = await fetch('./notifs?id=' + JSON.parse(window.localStorage.getItem('me'))._id);
+    const notifs = await fetch('./notifs?id=' + user_id);
  
     if (!notifs.ok) {
         console.error("Could not get notificaitons.");
     }else {
     	const notifications = await notifs.json();
-    	const br = document.createElement('br');
-    	const requests = document.getElementById('notifications');
-			console.log(notifications);
-		for(let notif of notifications) {
-			let btn = document.createElement('button');
-			btn.className += "btn btn-outline-primary";
-			btn.innerHTML = notif.driver.name;
-			btn.appendChild(br);
-			btn.innerHTML += notif.driver.email;
-			requests.appendChild(btn);
 
-		}
+
+			let table = document.getElementById('notifications');
+			let tb = document.createElement('table');
+			tb.className += " " + "table-bordered" + " " + "table-rides";
+
+			initializeReqs(table, tb);
+
+			if(notifications !== undefined) {
+				for(let notif of notifications) {
+					buildReqs(table,tb,notif);
+				}
+			}
+			table.appendChild(tb);
     	
     }
 });
 
 function initialize(table, tb) {
-	const titles = ["Route", "Date", "Time", "Driver", "Email"];
+	const titles = ["Route", "ID", "Date", "Time", "Driver", "Email", ""];
+	const thead = document.createElement('thead');
+	const tr = document.createElement('tr');
+
+	for(const title of titles){ 
+		const th = document.createElement('th');
+		th.innerHTML = title;
+		tr.appendChild(th);
+		thead.appendChild(tr);
+		tb.appendChild(thead);
+	}
+
+	table.appendChild(tb);
+}
+
+function initializeReqs(table, tb) {
+	const titles = ["Name", "Email", "Ride ID", "",""];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
 
@@ -143,11 +155,16 @@ function initialize(table, tb) {
 }
 
 function build(table,tb,ride) {
+	console.log(ride);
 	const tbody = document.createElement('tbody');
 	let tr = document.createElement('tr');
 
 	let td = document.createElement('td');
-	td.innerHTML = ride.starting + " to " + ride.destination;
+	td.innerHTML = ride.from + " to " + ride.to;
+	tr.appendChild(td);
+
+	td = document.createElement('td');
+	td.innerHTML = ride._id;
 	tr.appendChild(td);
 
 	td = document.createElement('td');
@@ -166,6 +183,112 @@ function build(table,tb,ride) {
 	td.innerHTML = ride.driver.email;
 	tr.appendChild(td);
 
+	let button = document.createElement('button');
+	button.className += "btn btn-danger";
+	button.setAttribute('ride_id',ride._id);
+	button.setAttribute('driver_id',ride.driver._id);
+	button.innerHTML = "CANCEL";
+	button.addEventListener('click',cancel);
+
+	td = document.createElement('td');
+	td.appendChild(button)
+	tr.appendChild(td);
+
 	tbody.appendChild(tr);
 	tb.appendChild(tbody);
+}
+
+function buildReqs(table,tb,notif) {
+	console.log(notif);
+	const tbody = document.createElement('tbody');
+	let tr = document.createElement('tr');
+
+	let td = document.createElement('td');
+	td.innerHTML = notif.name;
+	tr.appendChild(td);
+
+	td = document.createElement('td');
+	td.innerHTML = notif.email;
+	tr.appendChild(td);
+
+	td = document.createElement('td');
+	td.innerHTML = notif.ride_id;
+	tr.appendChild(td);
+
+	let btn = document.createElement('button');
+	btn.className += "btn btn-outline-success";
+	btn.innerHTML = "Accept";
+	btn.setAttribute('user_id', notif._id);
+	btn.setAttribute('ride_id', notif.ride_id);
+	btn.addEventListener('click', accept);
+
+	td = document.createElement('td');
+	td.appendChild(btn);
+	tr.appendChild(td);
+
+	btn = document.createElement('button');
+	btn.className += "btn btn-outline-danger";
+	btn.innerHTML = "Reject";
+	btn.setAttribute('user_id', notif._id);
+	btn.setAttribute('ride_id', notif.ride_id);
+	btn.addEventListener('click', accept);
+
+	td = document.createElement('td');
+	td.appendChild(btn);
+	tr.appendChild(td);
+
+	tbody.appendChild(tr);
+	tb.appendChild(tbody);	
+}
+
+//accepts requests. adds ride to requestor's active rides
+async function accept() {
+	const from = this.getAttribute('user_id');
+	const ride_id = this.getAttribute('ride_id');
+	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
+
+	const rideRequest = await fetch('/user/rides/active?user_id=' + from + '&ride_id=' + ride_id + '');
+
+	await fetch('/denotify?from=' + from + '&to=' + to + '');
+
+    if(!rideRequest.ok) {
+        alert(response.error);
+    }
+    location.reload();
+    return;
+}
+
+//rejects requests
+async function reject() {
+	const from = this.getAttribute('user_id');
+	const ride_id = this.getAttribute('ride_id');
+	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
+
+	const rideRequest = await fetch('/user/rides/delete?user_id=' + from + '&ride_id=' + ride_id + '');
+	await fetch('/denotify?from=' + from + '&to=' + to + '');
+
+    if(!rideRequest.ok) {
+        alert(response.error);
+    }
+    location.reload();
+    return;
+}
+
+
+async function cancel(){
+	const ride_id = parseInt(this.getAttribute('ride_id'));
+	const driver_id = parseInt(this.getAttribute('driver_id'));
+	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
+
+	let response = await fetch('/user/rides/delete?user_id=' + user_id + '&ride_id=' + ride_id);
+	if(!response.ok) {
+		console.error(response);
+		return;
+	}
+
+	alert(ride_id);
+/*
+	if(driver_id === parseInt(user_id)){
+		response = await fetch('/ride/delete?ride_id=' + ride_id);
+	}*/
 }

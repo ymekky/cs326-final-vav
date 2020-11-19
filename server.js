@@ -34,7 +34,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.use('/', express.static('client'));
-//app.get('/', (req, res) => {res.sendFile(path.join(__dirname + '/client/index.html'))});
 app.get('/loginpage', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/login.html'));
 })
@@ -45,269 +44,132 @@ app.get('/account', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/account.html'));
 })
 
-let database;
-if (fs.existsSync("database.json")) {
-    database = JSON.parse(fs.readFileSync("database.json"));
-} else {
-    database = {
-        Users: [],
-        Rides: [],
-        Drivers: []
-    };
-}
 
 
 // /user/rides/view?user_id=12
-app.get('/user/rides/view', (req, res) => {
+app.get('/user/rides/view', async function (req, res) {
+	const user_id = parseInt(req.query.user_id);
+    const user = await user_collection.findOne({"_id":user_id});
     let my_rides = {};
 
-/*
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = database.Rides[ride];
-        }
+    if(user !== null){
+    	my_rides = user.my_rides;
     }
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === user_id) {
-            res.json({"rides" : database.Users[user]["Rides"]});
-        }
-    }
-*/
-//fake
-    res.json({"active": {"id":232,"date":"12/11/2020","time":"2:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 72,'name': "John Smith", "email":"johnsmith@umass.edu"}},
-            "pending": [{"id":280,"date":"12/11/2020","time":"5:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 83,'name': "Jane Smith", "email":"jsmith@umass.edu"}},
-                        {"id":281,"date":"13/11/2020","time":"2:30PM","starting":"UMASS","destination":"Boston Logan Airport","driver": {'id': 281,'name': "Jane Doe", "email":"jdoe@umass.edu"}}],
-            "completed": [{"id":1719,"date":"01/09/2020","time":"1:00AM","destination":"UMASS","starting":"Boston Logan Airport", "driver":{'id': 72,'name': "John Smith","email":"johnsmith@umass.edu"}}],
-            "cancelled": []});
+
+    res.json(my_rides);
 });
 
 // /user/rides/pending?user_id=12&ride_id=702 //searching
-app.get('/user/rides/pending', (req, res) => {
+app.get('/user/rides/pending', async (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = {};
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = database.Rides[ride];
-        }
-    }
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === user_id) {
-            //console.log(my_ride);
-            if(!database.Users[user]["Rides"]['pending']) {
-                database.Users[user]["Rides"]['pending'] = [];
-            }
-            database.Users[user]["Rides"]['pending'].push(my_ride);
-        }
-    }
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
+    let my_ride = await rides_collection.findOne({"_id": ride_id});
+
+    const pending = await user_collection.updateOne({"_id": user_id}, {$push: {"my_rides.pending": my_ride}});
+
     res.send(`Added ride ${ride_id} to ${user_id}'s pending rides`);
 });
 
 // /user/rides/active?user_id=12&ride_id=702  //request accepted
-app.get('/user/rides/active', (req, res) => {
+app.get('/user/rides/active', async (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = utils.findRide(ride_id,database); //{};
-    /*
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = database.Rides[ride];
-        }
-    }*/
+    let my_ride = await rides_collection.findOne({"_id": ride_id});
+    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.pending": my_ride}});
+    await user_collection.updateOne({"_id": user_id}, {$push: {"my_rides.active": my_ride}});
 
-  for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === user_id) {
-            //console.log(my_ride);
-            my_ride.riders.push(database.Users[user].name); // add user name to ride
-            database.Users[user]["Rides"]['active'] = my_ride;
-
-            //utils.addToRide(ride_id,database,database.Users[user]);
-
-            const pendingRides = database.Users[user]["Rides"]['pending'];
-            for(let ride in pendingRides) {
-                if(pendingRides[ride]) { 
-                    if(pendingRides[ride].id === ride_id) {
-                        delete pendingRides[ride];
-                    }
-                }
-            }
-
-        }
-    }
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
     res.send(`Added ride ${ride_id} to ${user_id}'s active rides`);
 });
 
 // /user/rides/completed?user_id=12&ride_id=702 //done 
-app.get('/user/rides/completed', (req, res) => {
+app.get('/user/rides/completed', async (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = {}; //too much repetition; should make a function
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = database.Rides[ride];
-        }
-    }
-
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === user_id) {
-            //console.log(my_ride);
-            if(!database.Users[user]["Rides"]['completed']) {
-                database.Users[user]["Rides"]['completed'] = [];
-            }
-            database.Users[user]["Rides"]['completed'].push(my_ride); //add to completed rides
-
-            const aciveRides = database.Users[user]["Rides"]['active'];
-            for(let ride in aciveRides) { //remove from active rides 
-                if(aciveRides[ride].id === ride_id) {
-                    delete aciveRides[ride];
-                }
-            }
-        }
-    }
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
+    const my_ride = await rides_collection.findOne({"_id": ride_id});
+    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.active": my_ride}});
+    await user_collection.updateOne({"_id": user_id}, {$push: {"my_rides.completed": my_ride}});
     res.send(`Added ride ${ride_id} to ${user_id}'s completed rides`);
 });
 
 // /user/rides/delete?user_id=12&ride_id=702
-app.get('/user/rides/delete', (req, res) => {
+app.get('/user/rides/delete', async (req, res) => {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = {};
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = database.Rides[ride];
-        }
+    const my_ride = await rides_collection.findOne({"_id": ride_id});
+
+    if(user_id === my_ride.driver._id) {
+	    await user_collection.updateMany({},{$pull :{"my_rides.active": {"_id":ride_id}}}); //removes ride from everyone's existing rides
+	    await user_collection.updateMany({},{$pull :{"my_rides.pending": {"_id":ride_id}}});
+	    await rides_collection.deleteOne({"_id":ride_id});
+	    await user_collection.updateOne({"_id": my_ride.driver._id}, {$pull: {"notifications": {"ride_id": ride_id}}}); //remove notification for driver
     }
-
-    for(let user in database.Users){
-        if(parseInt(database.Users[user].id) === user_id) {
-            //console.log(my_ride);
-            if(!database.Users[user]["Rides"]['cancelled']) {
-                database.Users[user]["Rides"]['cancelled'] = [];
-            }
-            database.Users[user]["Rides"]['cancelled'].push(my_ride); //add to completed rides
-
-
-            //TODO
-            const aciveRides = database.Users[user]["Rides"]['active'];
-            const pendingRides = database.Users[user]["Rides"]['pending'];
-            for(let ride in aciveRides) { //remove from active rides 
-                if(aciveRides[ride].id === ride_id) {
-                    delete aciveRides[ride];
-                }
-            }
-        }
-    }
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
-    res.send(`Added ride ${ride_id} to ${user_id}'s completed rides`);
+    else{
+	    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.active": {"_id":ride_id}}});
+	    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.pending": {"_id":ride_id}}});
+	    await user_collection.updateOne({"_id": my_ride.driver._id}, {$pull: {"notifications": {"_id": user_id}}}); //remove notification for driver
+	}cons
+    res.send(`Removed ride ${ride_id} from ${user_id}'s active rides`);
 });
 
-//   curl -d '{ "user_id" : "123", "ride_id" : "232", "date": "12/02/2020", "time": "2:30PM","name":"JSJ"}' -H "Content-Type: application/json" http://localhost:3000/346
+//   curl -d '{ "driver" : {}, date": "12/02/2020", "time": "2:30PM","from":"umass", "to":"BOS"}' -H "Content-Type: application/json" http://localhost:3000/346
 app.post('/ride/new', async (req, res) => {
-    
-    const user_id = req.body["user_id"];
+    const driver = req.body["driver"];
     const date = req.body["date"];
     const time = req.body["time"];
     const from = req.body["from"];
     const to = req.body["to"];
-    const driver_id = req.body["driver_id"];
+    const ride_id = Math.floor(Math.random() * 10000); //ride id, change to randomize*/
+
     const ride = {
-        date: date,
-        time: time,
-        to: to,
-        from: from,
-        driver_id: driver_id,
-        user_id: user_id
+        _id: ride_id,	
+        date: date,	        
+        time: time,	       
+        from: from,	        
+        to: to,	   
+        driver: driver
     }
-    console.log('Ride: ', ride)
-    const returnedRide = await rides_collection.insertOne(ride)
+    const returnedRide = await rides_collection.insertOne(ride);
+    const newRide = await user_collection.updateOne({"_id": driver._id}, {$push: {"my_rides.active": ride}});
    
-    //console.log(`Created ride ${ride_id} with driver ${user_id}`);
     res.send({success: true});
 });
 
 
-app.get('/drivers', async (req, res) => {
-    const drivers = await driver_collection.find({}).toArray();
-    console.log('Drivers: ', drivers);
-    res.json(drivers);
-});
-
 // ride/delete?ride_id=702
-app.get('/ride/delete', (req, res) => {
+app.get('/ride/delete', async (req, res) => {
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = {};
-    for(let ride in database.Rides) {
-        //console.log(database.Rides[ride]);
-        //console.log(ride_id);
-        if (parseInt(database.Rides[ride].id) === ride_id) {
-            my_ride = JSON.stringify(database.Rides[ride]);
-            delete database.Rides[ride];
-        }
-    }
+    await user_collection.updateMany({},{$pull :{"my_rides.active": {"_id":ride_id}}}); //removes ride from everyone's existing rides
+    await user_collection.updateMany({},{$pull :{"my_rides.pending": {"_id":ride_id}}});
+    await rides_collection.deleteOne({"_id":ride_id});
 
-    for(let user in database.Users){
-        if(JSON.parse(my_ride) in database.Users[user].Rides) { //might not work 
-            //TODO
-        }
-    }
-    fs.writeFile("database.json", JSON.stringify(database), err => {
-        if (err) {
-            console.err(err);}
-    });
     res.send(`Deleted ${ride_id} from list of rides`);
 });
 
 //available rides
-// app.get('/rides/view', (req, res) => {
-//     // const rides = [];//[{"id":280,"date":"12/11/2020","time":"5:30PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 83,'name': "Jane Smith", "email":"jsmith@umass.edu"}}]; 
-//     // rides.push({"id":700,"date":"12/11/2020","time":"1:00PM","starting":"UMASS","destination":"Boston Logan Airport", "driver": {'id': 172,'name': "Sarah Joe", "email":"sjoe@umass.edu"}});
-//     // for(let ride of database.Rides){
-//     //     rides.push(ride);
-//     // }
-//     // res.json({available: rides});
-    
-// });
+app.get('/rides/view', async function(req, res) {
+const rides = await rides_collection.find({}).toArray();
+res.json({available: rides});    
+});
   
 //   curl -d '{ "id" : "123", "name" : "jane doe", "email": "jdoe@umass.edu", "password": "123"}' -H "Content-Type: application/json" http://localhost:8000/user/new
-app.post('/user/new', (req, res) => {
+app.post('/user/new', async (req, res) => {
     const id = Math.floor(Math.random() * 10000);
-    //const id = req.body["id"];
     const name = req.body["name"];
     const email = req.body["email"];
     const password = req.body["password"];
+    const check = await user_collection.countDocuments({"email": email}, {limit: 1});
+    if(check > 0){ //email already exists
+    	res.sendStatus(403);
+    	return;
+    }
 
     let user = {
-        id: id,
+        _id: id,
         name: name,
         email: email,
         password: password,
@@ -319,7 +181,7 @@ app.post('/user/new', (req, res) => {
        user_collection.insertOne(user);
        res.json({me: user, 'success':true});
     } catch (e) {
-       console.log(e);
+       console.error(e);
        res.sendStatus(500);
     };
 });
@@ -328,8 +190,7 @@ app.post('/user/new', (req, res) => {
 app.get('/login', async function(req, res) {
     const _email = req.query.email;
     const password = req.query.password;
-    let user = await user_collection.findOne({"email": _email}, {_id: 0});
-    console.log(user);
+    let user = await user_collection.findOne({"email": _email});
 
     if(user !== null){
         if(password === user.password){
@@ -343,45 +204,35 @@ app.get('/login', async function(req, res) {
     }
 });
 
-// /notify?from=123&to=321
-app.get('/notify', async (req, res) => {
-    const from = req.query.from;
-    const to = req.query.to;
-    const driverMessage = 'A person has requested a ride.';
-    const riderMessage = 'Your ride has been requested and your driver has been notified.';
-    
-    const driverNotification = {
-        from,
-        to,
-        message: driverMessage
-    };
-    const riderNotification = {
-        from: to,
-        to: from,
-        message: riderMessage
-    };
+// /notify?from=123&to=321&ride_id=1271
+app.get('/notify', async function (req, res) {
+    const from = parseInt(req.query.from);
+    const to = parseInt(req.query.to);
+    const ride_id = parseInt(req.query.ride_id);
 
- 
-    const notification1 = await  notifications_collection.insertOne(driverNotification);
-    const notification2 = await  notifications_collection.insertOne(riderNotification);
+    const me = await user_collection.findOne({"_id": from});
+    user_collection.updateOne({"_id": to}, {$push: {"notifications": {"name": me.name, "_id": me._id, "email": me.email, "ride_id": ride_id}}});
+
+    res.send({success: true});
+});
+
+// /denotify?from=123&to=321
+app.get('/denotify', async function (req, res) {
+    const from = parseInt(req.query.from);
+    const to = parseInt(req.query.to);
+
+    await user_collection.updateOne({"_id": to}, {$pull: {"notifications": {"_id": from}}});
 
     res.send({success: true});
 });
 
 // /notifs?id=321
 app.get('/notifs', async (req, res) => {
-    const user_id = req.query.id;
-    console.log(user_id);
+    const user_id = parseInt(req.query.id);
     try {
-        const notifications = await notifications_collection.find({to: user_id}).toArray();
-        console.log('For jay: ', notifications);
-        for (notification of notifications) {
-            console.log(notification.from);
-            const driver = await driver_collection.findOne({_id: new ObjectId(notification.from)});
-            console.log('Driver information', driver);
-            notification.driver = driver;
-            res.json(notifications);
-        }
+        const user = await user_collection.findOne({"_id": user_id});
+        const notifications = user.notifications;
+        res.json(notifications);
 
     } catch(err) {
         res.json({success: false, error: 'Error grabbing notifications'})
