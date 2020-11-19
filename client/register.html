@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="container center">
-      <form class="center border shadow-lg p-3 mb-5 bg-white rounded">
+      <form class="center border shadow-lg p-3 mb-5 bg-white rounded" onsubmit="return false">
         <h1 class="blue-text">Create Account</h1>
         <div class="form-group">
           <label for="email">Name</label>
@@ -43,6 +43,7 @@
             id="name"
             aria-describedby="nameHelp"
             placeholder="Enter Name"
+            required
           />
           <small id="emailHelp" class="form-text text-muted"></small>
         </div>
@@ -54,6 +55,7 @@
             id="email"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            required
           />
           <small id="emailHelp" class="form-text text-muted"></small>
         </div>
@@ -64,6 +66,7 @@
             class="form-control"
             id="password"
             placeholder="Password"
+            required
           />
         </div>
         <div class="form-group">
@@ -73,9 +76,10 @@
             class="form-control"
             id="confirmPassword"
             placeholder="Confirm Password"
+            required
           />
         </div>
-        <button type="button" class="btn btn-primary" id="register-click">
+        <button type="submit" class="btn btn-primary" id="register-click">
           Register
         </button>
 

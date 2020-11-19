@@ -20,12 +20,14 @@ window.addEventListener("load", async function() {
 			const tr = document.createElement('tr');
 			tr.innerHTML = '<th scope="row"> <img src="files/profile.png" class="mr-3 profile-img" alt="..."></th>';
 			const br = document.createElement('br');
+			let date;
 			let td = document.createElement('td');
 			td.innerHTML = ride.driver.name;
 			tr.appendChild(td);
 
 			td = document.createElement('td');
-			td.innerHTML = "Date: " + ride.date;
+			date = ride.date.slice(5,7) + '-' + ride.date.slice(8,10) + '-' + ride.date.slice(0,4); //mm/dd/yyyy
+			td.innerHTML = "Date: " + date;
 			td.appendChild(br);
 			td.innerHTML += "Time: " + ride.time;
 			tr.appendChild(td);

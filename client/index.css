@@ -32,6 +32,12 @@ label {
   margin: 1px !important;
 }
 
+table {
+    table-layout:fixed;
+    width:100%;
+    word-wrap: break-word; 
+}
+
 a[href] {
   color: inherit;
   padding-left: 1em;
@@ -96,7 +102,10 @@ a[href] {
 }
 
 .details {
-  width: 60% !important;
+  /*width: 60% !important;*/
+  height: auto;
+  width: 100vh;
+  object-fit: cover;
 }
 
 .btn-primary {
@@ -137,8 +146,23 @@ a[href] {
   display: block !important;
 }
 
-.table-rides {
-  table-layout: fixed;
-  width: 100%;
-  word-wrap: break-word;
+.hide {
+  display: none !important;
 }
+
+.table-rides {
+  word-wrap: break-word; 
+}
+
+.table-fit {
+  width: 1px;
+}
+
+.nav-tabs, .tab {
+  font-size: 1.3em !important;
+}
+
+.tab {
+  color: #0275d8;
+}
+

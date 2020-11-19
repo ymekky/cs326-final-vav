@@ -6,7 +6,29 @@ window.addEventListener("load", async function() {
 
 	document.getElementById("logout").addEventListener('click', function () {
 		window.localStorage.setItem("logged-in", false);
-		window.location.replace('./index.html')
+		window.location.replace('./index.html');
+	});
+
+	document.getElementById("change-pwd").addEventListener('click', async function () {
+		if(document.getElementById('password').readOnly === true){
+			document.getElementById('password').readOnly = false;
+			document.getElementById("change-pwd").addEventListener('click', async function () {
+				const newPwd = document.getElementById("password").value;
+				try {
+					let changedPwd = await fetch(`/user/password?user_id=${user_id}&new=${newPwd}`);
+					let user = JSON.parse(window.localStorage.getItem("me"));
+					user.password = newPwd;
+					window.localStorage.setItem("me",JSON.stringify(user));
+					document.getElementById('password').readOnly = true;
+					document.getElementById("password").value = JSON.parse(window.localStorage.getItem("me")).password;
+					location.reload();
+				}
+				catch(e) {
+					console.error(e);
+				}
+			});
+		}
+		else {}
 	});
 
 	document.getElementById("nav-request-tab").addEventListener('click', function () {
@@ -52,14 +74,16 @@ window.addEventListener("load", async function() {
 			//-----------------------------------------------
 			let table = document.getElementById('requested');
 			let tb = document.createElement('table');
-			tb.className += " " + "table-bordered" + " " + "table-rides";
+			tb.className += " table-bordered table-rides";
 
-			initialize(table, tb);
-
-			if(rides.pending !== undefined) {
+			if(rides.pending !== undefined && rides.pending.length > 0) {
+				initializeRides(table, tb);
+				tb.className += "table-fit";
 				for(let ride of rides.pending) {
-					build(table,tb,ride);
+					buildRides(table,tb,ride);
 				}
+			}else {
+				tb.innerText = "None.";
 			}
 			table.appendChild(tb);
 			//-----------------------------------------------
@@ -69,14 +93,16 @@ window.addEventListener("load", async function() {
 
 			table = document.getElementById('active-rides');
 			tb = document.createElement('table');
-			tb.className += " " + "table-bordered" + " " + "table-rides";
+			tb.className += " table-bordered table-rides";
 
-			initialize(table, tb);
-
-			if(rides.active !== undefined) {
+			if(rides.active !== undefined && rides.active.length > 0) {
+				initializeRides(table, tb);
+				tb.className += "table-fit";
 				for(let ride of rides.active) {
-					build(table,tb,ride);
+					buildRides(table,tb,ride);
 				}
+			}else {
+				tb.innerText = "None.";
 			}
 			table.appendChild(tb);
 
@@ -86,14 +112,16 @@ window.addEventListener("load", async function() {
 			//-----------------------------------------------
 			table = document.getElementById('completed');
 			tb = document.createElement('table');
-			tb.className += " " + "table-bordered" + " " + "table-rides";
+			tb.className += " table-bordered table-rides";
 
-			initialize(table, tb);
-
-			if(rides.completed !== undefined) {
+			if(rides.completed !== undefined && rides.completed.length > 0) {
+				initializeRides(table, tb);
+				tb.className += "table-fit";
 				for(let ride of rides.completed) {
-					build(table,tb,ride);
+					buildRides(table,tb,ride);
 				}
+			}else {
+				tb.innerText = "None.";
 			}
 			table.appendChild(tb);
     }
@@ -104,25 +132,25 @@ window.addEventListener("load", async function() {
         console.error("Could not get notificaitons.");
     }else {
     	const notifications = await notifs.json();
+		let table = document.getElementById('notifications');
+		let tb = document.createElement('table');
+		tb.className += " " + "table-bordered" + " " + "table-rides";
 
-
-			let table = document.getElementById('notifications');
-			let tb = document.createElement('table');
-			tb.className += " " + "table-bordered" + " " + "table-rides";
-
+		if(notifications.length > 0) {
 			initializeReqs(table, tb);
-
-			if(notifications !== undefined) {
-				for(let notif of notifications) {
-					buildReqs(table,tb,notif);
-				}
+			for(let notif of notifications) {
+				buildReqs(table,tb,notif);
 			}
-			table.appendChild(tb);
+		}
+		else {
+			tb.innerText = "None.";
+		}
+		table.appendChild(tb);
     	
     }
 });
 
-function initialize(table, tb) {
+function initializeRides(table, tb) {
 	const titles = ["Route", "ID", "Date", "Time", "Driver", "Email", ""];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
@@ -139,12 +167,17 @@ function initialize(table, tb) {
 }
 
 function initializeReqs(table, tb) {
-	const titles = ["Name", "Email", "Ride ID", "",""];
+	const titles = ["Name", "Email", "Ride ID","Confirm"];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
 
 	for(const title of titles){ 
 		const th = document.createElement('th');
+		if(title === "Confirm"){
+			th.className = "text-center";
+			th.setAttribute("colspan","2");
+			th.setAttribute("scope","colgroup");
+		}
 		th.innerHTML = title;
 		tr.appendChild(th);
 		thead.appendChild(tr);
@@ -154,10 +187,10 @@ function initializeReqs(table, tb) {
 	table.appendChild(tb);
 }
 
-function build(table,tb,ride) {
-	console.log(ride);
+function buildRides(table,tb,ride) {
 	const tbody = document.createElement('tbody');
 	let tr = document.createElement('tr');
+	let date;
 
 	let td = document.createElement('td');
 	td.innerHTML = ride.from + " to " + ride.to;
@@ -168,7 +201,8 @@ function build(table,tb,ride) {
 	tr.appendChild(td);
 
 	td = document.createElement('td');
-	td.innerHTML = ride.date;
+	date = ride.date.slice(5,7) + '-' + ride.date.slice(8,10) + '-' + ride.date.slice(0,4); //mm/dd/yyyy
+	td.innerHTML = date;
 	tr.appendChild(td);
 
 	td = document.createElement('td');
@@ -184,7 +218,7 @@ function build(table,tb,ride) {
 	tr.appendChild(td);
 
 	let button = document.createElement('button');
-	button.className += "btn btn-danger";
+	button.className += "btn btn-danger h-center w-100";
 	button.setAttribute('ride_id',ride._id);
 	button.setAttribute('driver_id',ride.driver._id);
 	button.innerHTML = "CANCEL";
@@ -216,7 +250,7 @@ function buildReqs(table,tb,notif) {
 	tr.appendChild(td);
 
 	let btn = document.createElement('button');
-	btn.className += "btn btn-outline-success";
+	btn.className += "btn btn-outline-success w-100 d-flex justify-content-center";
 	btn.innerHTML = "Accept";
 	btn.setAttribute('user_id', notif._id);
 	btn.setAttribute('ride_id', notif.ride_id);
@@ -227,11 +261,11 @@ function buildReqs(table,tb,notif) {
 	tr.appendChild(td);
 
 	btn = document.createElement('button');
-	btn.className += "btn btn-outline-danger";
+	btn.className += "btn btn-outline-danger w-100 d-flex justify-content-center";
 	btn.innerHTML = "Reject";
 	btn.setAttribute('user_id', notif._id);
 	btn.setAttribute('ride_id', notif.ride_id);
-	btn.addEventListener('click', accept);
+	btn.addEventListener('click', reject);
 
 	td = document.createElement('td');
 	td.appendChild(btn);
@@ -285,10 +319,4 @@ async function cancel(){
 		console.error(response);
 		return;
 	}
-
-	alert(ride_id);
-/*
-	if(driver_id === parseInt(user_id)){
-		response = await fetch('/ride/delete?ride_id=' + ride_id);
-	}*/
 }

@@ -111,7 +111,7 @@ app.get('/user/rides/delete', async (req, res) => {
 	    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.active": {"_id":ride_id}}});
 	    await user_collection.updateOne({"_id": user_id}, {$pull: {"my_rides.pending": {"_id":ride_id}}});
 	    await user_collection.updateOne({"_id": my_ride.driver._id}, {$pull: {"notifications": {"_id": user_id}}}); //remove notification for driver
-	}cons
+	}
     res.send(`Removed ride ${ride_id} from ${user_id}'s active rides`);
 });
 
@@ -119,10 +119,17 @@ app.get('/user/rides/delete', async (req, res) => {
 app.post('/ride/new', async (req, res) => {
     const driver = req.body["driver"];
     const date = req.body["date"];
-    const time = req.body["time"];
+    let time = req.body["time"];
+    let hour = time.slice(0,2);
+
+    if(parseInt(hour) >= 13) {
+    	hour = parseInt(hour) - 12;
+    	time = JSON.stringify(hour) + time.slice(2,5) + "PM";
+    } 
+
     const from = req.body["from"];
     const to = req.body["to"];
-    const ride_id = Math.floor(Math.random() * 10000); //ride id, change to randomize*/
+    const ride_id = Math.floor(Math.random() * 10000);
 
     const ride = {
         _id: ride_id,	
@@ -186,18 +193,36 @@ app.post('/user/new', async (req, res) => {
     };
 });
 
+// /user/password?user_id=3727&new=12372
+app.get('/user/password', async function(req, res) {
+	const user_id = parseInt(req.query.user_id);
+    const newpwd = req.query.new;
+    const user = await user_collection.findOne({"_id": user_id});
+
+    try {
+    	let user = await user_collection.updateOne({"_id": user_id}, {$set :{password: newpwd}});
+    	res.sendStatus(200);
+	}
+	catch(err) {
+        res.sendStatus(500);
+    }
+});
+
 // login?email=jdoe@umass.edu&password=123
 app.get('/login', async function(req, res) {
     const _email = req.query.email;
     const password = req.query.password;
-    let user = await user_collection.findOne({"email": _email});
+    let user = await user_collection.findOne({"email": _email}, {fields: {"my_rides": 0,"notifications": 0}});
+    console.log(user);
+
+    console.log(user.password, password);
 
     if(user !== null){
         if(password === user.password){
             res.json({me: user});
         }
         else {
-            res.status(400).json({error: "Incorrect password."});
+            res.status(403).json({error: "Incorrect password."});
         }
     } else {
         res.status(400).json({error: "Email not found."});
