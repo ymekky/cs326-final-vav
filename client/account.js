@@ -282,8 +282,7 @@ async function accept() {
 	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
 
 	const rideRequest = await fetch('/user/rides/active?user_id=' + from + '&ride_id=' + ride_id + '');
-
-	await fetch('/denotify?from=' + from + '&to=' + to + '');
+	await fetch('/denotify?from=' + from + '&to=' + to + '&ride_id=' + ride_id);
 
     if(!rideRequest.ok) {
         alert(response.error);
@@ -299,7 +298,7 @@ async function reject() {
 	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
 
 	const rideRequest = await fetch('/user/rides/delete?user_id=' + from + '&ride_id=' + ride_id + '');
-	await fetch('/denotify?from=' + from + '&to=' + to + '');
+	await fetch('/denotify?from=' + from + '&to=' + to + '&ride_id=' + ride_id);
 
     if(!rideRequest.ok) {
         alert(response.error);
@@ -319,4 +318,5 @@ async function cancel(){
 		console.error(response);
 		return;
 	}
+	location.reload();
 }

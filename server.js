@@ -241,12 +241,13 @@ app.get('/notify', async function (req, res) {
     res.send({success: true});
 });
 
-// /denotify?from=123&to=321
+// /denotify?from=123&to=321&ride_id
 app.get('/denotify', async function (req, res) {
     const from = parseInt(req.query.from);
     const to = parseInt(req.query.to);
+    const ride_id = parseInt(req.query.ride_id);
 
-    await user_collection.updateOne({"_id": to}, {$pull: {"notifications": {"_id": from}}});
+    await user_collection.updateOne({"_id": to}, {$pull: {"notifications": {"_id": from, "ride_id": ride_id}}});
 
     res.send({success: true});
 });
