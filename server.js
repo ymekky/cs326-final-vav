@@ -245,15 +245,22 @@ MongoClient.connect(uri, {
       to: to,
       driver: driver,
     };
-    const returnedRide = await rides_collection.insertOne(ride);
-    const newRide = await user_collection.updateOne(
-      { _id: driver._id },
-      { $push: { "my_rides.active": ride } }
-    );
+    try{
+      const returnedRide = await rides_collection.insertOne(ride);
+    } catch(e) {
+      console.error(e);
+      res.sendStatus(500);
+    }
+    try{
+      const newRide = await user_collection.updateOne({ "_id": driver._id }, { $push: { "my_rides.active": ride } } );
+    } catch (e){
+      console.error(e);
+      res.sendStatus(500);
+    }
 
-    res.send({ success: true });
+    res.sendStatus(200);
   });
-
+/*
   // ride/delete?ride_id=702
   app.get("/ride/delete", checkLoggedIn, async (req, res) => {
     console.log('hi')
@@ -270,7 +277,7 @@ MongoClient.connect(uri, {
     await rides_collection.deleteOne({ _id: ride_id });
 
     res.send(`Deleted ${ride_id} from list of rides`);
-  });
+  });*/
 
   //available rides
   app.get("/rides/view", checkLoggedIn, async function (req, res) {
@@ -345,9 +352,9 @@ MongoClient.connect(uri, {
     const from = parseInt(req.query.from);
     const to = parseInt(req.query.to);
     const ride_id = parseInt(req.query.ride_id);
-
+    console.log(from, to, ride_id);
     const me = await user_collection.findOne({ _id: from });
-    user_collection.updateOne(
+    await user_collection.updateOne(
       { _id: to },
       {
         $push: {
