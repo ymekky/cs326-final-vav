@@ -13,10 +13,9 @@ const utils = require("./database");
 const cors = require("cors");
 const port = process.env.PORT || 8080;
 const mc = require("./miniCrypt");
-
 const miniCrypt = new mc();
 
-
+var MongoDBStore = require('connect-mongodb-session')(expressSession);
 
 function checkLoggedIn(req, res, next) {
   console.log(req.user, req.isAuthenticated());
@@ -29,12 +28,6 @@ function checkLoggedIn(req, res, next) {
   }
 }
 
-// Session configuration
-const session = {
-  secret: process.env.SECRET || "SECRET", // set this encryption key in Heroku config (never in GitHub)!
-  resave: false,
-  saveUninitialized: false,
-};
 
 // Passport configuration
 
@@ -46,6 +39,19 @@ if (!process.env.URI) {
 } else {
   uri = process.env.URI;
 }
+var store = new MongoDBStore({
+  uri: uri,
+  collection: 'sessions'
+});
+
+// Session configuration
+const session = {
+  secret: process.env.SECRET || "SECRET", // set this encryption key in Heroku config (never in GitHub)!
+  resave: false,
+  saveUninitialized: true,
+  store: store
+};
+
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
 MongoClient.connect(uri, {
@@ -82,6 +88,7 @@ MongoClient.connect(uri, {
     // should create a user object here, associated with a unique identifier
     return done(null, {_id: user._id, email, name: user.name});
   });
+  app.use("/", express.static("client"));
   app.use(expressSession(session));
   passport.use(strategy);
   app.use(passport.initialize());
@@ -97,15 +104,18 @@ MongoClient.connect(uri, {
   });
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cors());
-  app.use("/", express.static("client"));
+  app.use(cors({ credentials: true}));
   app.get("/loginpage", (req, res) => {
+    res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/login.html"));
   });
   app.get("/register", (req, res) => {
+    res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/register.html"));
   });
   app.get("/account", (req, res) => {
+    //res.header('Access-Control-Allow-Credentials', true);
+    res.sendFile(path.join(__dirname + "/client/account.html"));
     console.log('here? account', req.user);
     res.json(req.user);
   });
@@ -327,7 +337,7 @@ MongoClient.connect(uri, {
   app.get('/logout', checkLoggedIn, function(req, res){
     console.log('logout');
     req.logout();
-  
+    res.sendStatus(200);
   });
 
   // /notify?from=123&to=321&ride_id=1271

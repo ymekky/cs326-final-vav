@@ -5,7 +5,7 @@ window.addEventListener("load", async function() {
 	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
 
 	document.getElementById("logout").addEventListener('click', async function () {
-		const res = await fetch('/logout');
+		const res = await fetch('/logout',{credentials: 'include'});
 		if (res.ok) {
 			window.localStorage.setItem("logged-in", false);
 			window.localStorage.setItem("me", null);
@@ -66,7 +66,7 @@ window.addEventListener("load", async function() {
 		document.getElementById("requested").className = "tab-pane fade";
 	});
 
-    const response = await fetch(`./user/rides/view?user_id=${user_id}`); //change
+    const response = await fetch(`./user/rides/view?user_id=${user_id}`,{credentials: 'include'}); //change
     if (!response.ok) {
         console.error("Could not view rides.");
     }
@@ -131,7 +131,7 @@ window.addEventListener("load", async function() {
 			table.appendChild(tb);
     }
 
-    const notifs = await fetch('./notifs?id=' + user_id);
+    const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
  
     if (!notifs.ok) {
         console.error("Could not get notificaitons.");
@@ -286,7 +286,7 @@ async function accept() {
 	const ride_id = this.getAttribute('ride_id');
 	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
 
-	const rideRequest = await fetch('/user/rides/active?user_id=' + from + '&ride_id=' + ride_id + '');
+	const rideRequest = await fetch('/user/rides/active?user_id=' + from + '&ride_id=' + ride_id + '',{credentials: 'include'});
 	await fetch('/denotify?from=' + from + '&to=' + to + '&ride_id=' + ride_id);
 
     if(!rideRequest.ok) {
@@ -302,7 +302,7 @@ async function reject() {
 	const ride_id = this.getAttribute('ride_id');
 	let to = JSON.stringify(JSON.parse(window.localStorage.getItem('me'))._id);
 
-	const rideRequest = await fetch('/user/rides/delete?user_id=' + from + '&ride_id=' + ride_id + '');
+	const rideRequest = await fetch('/user/rides/delete?user_id=' + from + '&ride_id=' + ride_id + '',{credentials: 'include'});
 	await fetch('/denotify?from=' + from + '&to=' + to + '&ride_id=' + ride_id);
 
     if(!rideRequest.ok) {
@@ -318,7 +318,7 @@ async function cancel(){
 	const driver_id = parseInt(this.getAttribute('driver_id'));
 	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
 
-	let response = await fetch('/user/rides/delete?user_id=' + user_id + '&ride_id=' + ride_id);
+	let response = await fetch('/user/rides/delete?user_id=' + user_id + '&ride_id=' + ride_id, {credentials: 'include'});
 	if(!response.ok) {
 		console.error(response);
 		return;

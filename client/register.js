@@ -1,7 +1,7 @@
 window.addEventListener("load", async function() {
 
   if(window.localStorage.getItem("logged-in") === true){
-    window.location.replace('./account');
+    window.location.replace('./account.html');
     return;
   }
 	document.getElementById("register-click").addEventListener('click', async function () {
@@ -34,7 +34,7 @@ window.addEventListener("load", async function() {
         if (user.success === true) {
           window.localStorage.setItem("logged-in", true);
           window.localStorage.setItem("me",JSON.stringify(user.me));
-          window.location.replace('./account')
+          window.location.replace('./account.html')
         }
         console.log('User Successfully Created', user)
       }

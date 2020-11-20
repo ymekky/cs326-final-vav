@@ -32,7 +32,7 @@ window.addEventListener("load", async function() {
 			      headers: {
 			        'Content-Type': 'application/json;charset=utf-8'
 			      },	      
-			      body: JSON.stringify({"date": document.getElementById('date').value,
+			    -  body: JSON.stringify({"date": document.getElementById('date').value,
 			      						"time": document.getElementById('time').value,
 			      						"from": document.getElementById('from').value,
 			      						"to": document.getElementById('to').value, 

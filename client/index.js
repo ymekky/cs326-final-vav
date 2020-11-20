@@ -1,4 +1,5 @@
 window.addEventListener('load', async function () {
+	const res = await fetch('/login', {credentials: "include"});
 	let logged = (window.localStorage.getItem("logged-in") !== null && window.localStorage.getItem("logged-in") !== "false");
 
 	if (!logged) {
