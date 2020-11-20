@@ -4,9 +4,14 @@ window.addEventListener("load", async function() {
 	document.getElementById("password").value = JSON.parse(window.localStorage.getItem("me")).password;
 	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
 
-	document.getElementById("logout").addEventListener('click', function () {
-		window.localStorage.setItem("logged-in", false);
-		window.location.replace('./index.html');
+	document.getElementById("logout").addEventListener('click', async function () {
+		const res = await fetch('/logout');
+		if (res.ok) {
+			window.localStorage.setItem("logged-in", false);
+			window.localStorage.setItem("me", null);
+			window.location.replace('./index.html');
+		}
+
 	});
 
 	document.getElementById("change-pwd").addEventListener('click', async function () {

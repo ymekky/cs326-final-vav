@@ -4,7 +4,14 @@ window.addEventListener("load", async function() {
 		const password = document.getElementById("password").value;
 
 
-	    const response = await fetch(`./login?email=${email}&password=${password}`);
+	    const response = await fetch(`./login`, {
+				headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({email, password})
+			});
 	    const user = await response.json();
 	    if (!response.ok) {
 	        console.error(user.error);
@@ -13,7 +20,7 @@ window.addEventListener("load", async function() {
 	    else {
 				console.log('user successfully logged in', user)
 	    		window.localStorage.setItem("logged-in", true);
-				window.localStorage.setItem("me",JSON.stringify(user.me));
+				window.localStorage.setItem("me",JSON.stringify(user));
 				window.location.replace('./account.html')
 	    }
 	});
