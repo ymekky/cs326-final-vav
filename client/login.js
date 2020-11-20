@@ -18,7 +18,7 @@ window.addEventListener("load", async function() {
 	        alert(user.error);
 	    }
 	    else {
-				console.log('user successfully logged in', user)
+				console.log('user successfully logged in', user);
 	    		window.localStorage.setItem("logged-in", true);
 				window.localStorage.setItem("me",JSON.stringify(user));
 				window.location.replace('./account.html')

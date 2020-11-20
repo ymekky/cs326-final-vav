@@ -117,7 +117,7 @@ MongoClient.connect(uri, {
     //res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/account.html"));
     console.log('here? account', req.user);
-    res.json(req.user);
+    res.status(200).json(req.user);
   });
 
   // /user/rides/view?user_id=12
@@ -232,6 +232,12 @@ MongoClient.connect(uri, {
       hour = parseInt(hour) - 12;
       time = JSON.stringify(hour) + time.slice(2, 5) + "PM";
     }
+    else if(parseInt(hour) < 12){
+      time = time + "AM";
+    }
+    else { //12 NOON
+      time = time + "PM";
+    }
 
     const from = req.body["from"];
     const to = req.body["to"];
@@ -260,24 +266,6 @@ MongoClient.connect(uri, {
 
     res.sendStatus(200);
   });
-/*
-  // ride/delete?ride_id=702
-  app.get("/ride/delete", checkLoggedIn, async (req, res) => {
-    console.log('hi')
-    const ride_id = parseInt(req.query.ride_id);
-
-    await user_collection.updateMany(
-      {},
-      { $pull: { "my_rides.active": { _id: ride_id } } }
-    ); //removes ride from everyone's existing rides
-    await user_collection.updateMany(
-      {},
-      { $pull: { "my_rides.pending": { _id: ride_id } } }
-    );
-    await rides_collection.deleteOne({ _id: ride_id });
-
-    res.send(`Deleted ${ride_id} from list of rides`);
-  });*/
 
   //available rides
   app.get("/rides/view", checkLoggedIn, async function (req, res) {
@@ -315,7 +303,8 @@ MongoClient.connect(uri, {
 
     try {
       user_collection.insertOne(user);
-      res.json({ me: user, success: true });
+      //res.json({ me: user, success: true });
+      res.redirect('/login.html');
     } catch (e) {
       console.error(e);
       res.sendStatus(500);

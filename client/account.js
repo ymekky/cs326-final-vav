@@ -11,7 +11,15 @@ window.addEventListener("load", async function() {
 			window.localStorage.setItem("me", null);
 			window.location.replace('./index.html');
 		}
+	});
 
+	document.getElementById("nav-logout").addEventListener('click', async function () {
+		const res = await fetch('/logout',{credentials: 'include'});
+		if (res.ok) {
+			window.localStorage.setItem("logged-in", false);
+			window.localStorage.setItem("me", null);
+			window.location.replace('./index.html');
+		}
 	});
 
 	document.getElementById("change-pwd").addEventListener('click', async function () {
@@ -83,7 +91,6 @@ window.addEventListener("load", async function() {
 
 			if(rides.pending !== undefined && rides.pending.length > 0) {
 				initializeRides(table, tb);
-				tb.className += "table-fit";
 				for(let ride of rides.pending) {
 					buildRides(table,tb,ride);
 				}
@@ -102,7 +109,6 @@ window.addEventListener("load", async function() {
 
 			if(rides.active !== undefined && rides.active.length > 0) {
 				initializeRides(table, tb);
-				tb.className += "table-fit";
 				for(let ride of rides.active) {
 					buildRides(table,tb,ride);
 				}
@@ -121,7 +127,6 @@ window.addEventListener("load", async function() {
 
 			if(rides.completed !== undefined && rides.completed.length > 0) {
 				initializeRides(table, tb);
-				tb.className += "table-fit";
 				for(let ride of rides.completed) {
 					buildRides(table,tb,ride);
 				}
@@ -156,9 +161,10 @@ window.addEventListener("load", async function() {
 });
 
 function initializeRides(table, tb) {
-	const titles = ["Route", "ID", "Date", "Time", "Driver", "Email", ""];
+	const titles = ["Route", "ID", "Date", "Time", "Driver", "Contact", ""];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
+	tr.className = "table-primary";
 
 	for(const title of titles){ 
 		const th = document.createElement('th');
@@ -172,9 +178,10 @@ function initializeRides(table, tb) {
 }
 
 function initializeReqs(table, tb) {
-	const titles = ["Name", "Email", "Ride ID","Confirm"];
+	const titles = ["Name", "Contact", "Route ID","Confirm"];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
+	tr.className = "table-primary";
 
 	for(const title of titles){ 
 		const th = document.createElement('th');
@@ -198,7 +205,7 @@ function buildRides(table,tb,ride) {
 	let date;
 
 	let td = document.createElement('td');
-	td.innerHTML = ride.from + " to " + ride.to;
+	td.innerHTML = ride.from + " - " + ride.to;
 	tr.appendChild(td);
 
 	td = document.createElement('td');
@@ -215,11 +222,16 @@ function buildRides(table,tb,ride) {
 	tr.appendChild(td);
 
 	td = document.createElement('td');
-	td.innerHTML = ride.driver.name;
+	if(ride.driver._id === JSON.parse(window.localStorage.getItem("me"))._id){
+		td.innerHTML = "You";
+	}
+	else {
+		td.innerHTML = ride.driver.name;
+	}
 	tr.appendChild(td);
 
 	td = document.createElement('td');
-	td.innerHTML = ride.driver.email;
+	td.innerHTML = '<a href=\"mailto:"' + ride.driver.email + '\">' + ride.driver.email +'</a';
 	tr.appendChild(td);
 
 	let button = document.createElement('button');
@@ -247,7 +259,7 @@ function buildReqs(table,tb,notif) {
 	tr.appendChild(td);
 
 	td = document.createElement('td');
-	td.innerHTML = notif.email;
+	td.innerHTML = '<a href=\"mailto:"' + notif.email + '\">' + notif.email +'</a';
 	tr.appendChild(td);
 
 	td = document.createElement('td');

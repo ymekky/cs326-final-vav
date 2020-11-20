@@ -4,6 +4,7 @@ window.addEventListener("load", async function() {
     window.location.replace('./account.html');
     return;
   }
+
 	document.getElementById("register-click").addEventListener('click', async function () {
 		const email = document.getElementById("email").value;
 		const password = document.getElementById("password").value;
@@ -23,6 +24,27 @@ window.addEventListener("load", async function() {
         body: JSON.stringify({email, password, name})
       }); 
 
+      if(response.ok){
+        window.location.replace('./login.html');
+        //const user = await response.json();
+        //window.localStorage.setItem("logged-in", true);
+        //window.localStorage.setItem("me",JSON.stringify(user.me));
+        //window.location.replace('./account.html');
+        //console.log('User Successfully Created', user); 
+      }
+      else if(response.status === 403) {
+        alert("This email already exists.");
+      }
+      else {
+        console.error("Could not register.");
+      }
+
+    } 
+    else {
+      document.getElementById('error').addClass('show');
+      console.log("Passwords don't match! try again");  
+    }
+/*
       if (!response.ok) {
           if(response.status === 403){
             alert("This email already exists.");
@@ -30,7 +52,8 @@ window.addEventListener("load", async function() {
           console.error("Could not register.");
       }
       else {
-        const user = await response.json();
+        console.log("here");
+        //const user = await response.json();
         if (user.success === true) {
           window.localStorage.setItem("logged-in", true);
           window.localStorage.setItem("me",JSON.stringify(user.me));
@@ -42,8 +65,8 @@ window.addEventListener("load", async function() {
     else {
       document.getElementById('error').addClass('show');
       console.log("Passwords don't match! try again");
-    }
-    
-    
+    } 
+*/ 
 	});
+
 });

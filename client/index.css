@@ -37,9 +37,15 @@ table {
     width:100%;
     word-wrap: break-word; 
 }
+td{
+  word-break:break-all;
+}
 
 a[href] {
   color: inherit;
+  /*padding-left: 1em;*/
+}
+.left-pad {
   padding-left: 1em;
 }
 .weight-300 {
@@ -151,11 +157,8 @@ a[href] {
 }
 
 .table-rides {
-  word-wrap: break-word; 
-}
-
-.table-fit {
-  width: 1px;
+  word-wrap: break-word;
+  text-align: center; 
 }
 
 .nav-tabs, .tab {

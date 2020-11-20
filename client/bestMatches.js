@@ -1,4 +1,10 @@
 window.addEventListener("load", async function() {
+	
+	document.getElementById("nav-logout").addEventListener('click', function () {
+		window.localStorage.setItem("logged-in", false);
+		window.localStorage.removeItem("me");
+		window.location.replace('./index.html');
+	});
 
 	const response = await fetch('./rides/view');
 	console.log('response', response);
@@ -11,10 +17,13 @@ window.addEventListener("load", async function() {
 		let rides = await response.json();
 		const tbody = document.getElementById('found');
 		rides = rides.available;
+		rides = rides.filter(ride => ride.date === JSON.parse(window.localStorage.getItem('search')).date);
+		rides = rides.filter(ride => ride.from === JSON.parse(window.localStorage.getItem('search')).from);
+		rides = rides.filter(ride => ride.to === JSON.parse(window.localStorage.getItem('search')).to);
 		if(rides.length === 0){
 			tbody.innerHTML = '<h3>No matches found.</h3>';
 		}
-		// rides = rides.available.filter(ride => ride.date === JSON.parse(window.localStorage.getItem('search')).date);
+		rides = rides.filter(ride => ride.date === JSON.parse(window.localStorage.getItem('search')).date);
 		// rides = sortRides(rides);
 		for(let ride of rides) {
 			const tr = document.createElement('tr');

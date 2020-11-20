@@ -8,7 +8,7 @@ window.addEventListener('load', async function () {
 	}
 	else {
 		document.getElementById("account-link").innerText= "My account";
-		document.getElementById("register").href = "#"; 
+		document.getElementById("register").className = "#"; 
 	}
 
 	document.getElementById("account-link").onclick = () => {

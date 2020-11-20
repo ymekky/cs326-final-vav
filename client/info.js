@@ -1,4 +1,8 @@
 window.addEventListener("load", async function() {
+	let today = new Date().toISOString().split('T')[0];
+	document.getElementById("date").setAttribute('min', today);
+	document.getElementById("date").value = today;
+
 	document.getElementById('sel1').onchange = () => {
 		if(document.getElementById('sel1').value === 'looking for a rider') {
 			document.getElementById('sel2-label').innerHTML = '';
