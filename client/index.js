@@ -1,13 +1,15 @@
 window.addEventListener('load', async function () {
 	const res = await fetch('/login', {credentials: "include"});
 	let logged = (window.localStorage.getItem("logged-in") !== null && window.localStorage.getItem("logged-in") !== "false");
-
+	console.log(logged)
 	if (!logged) {
 		document.getElementById("account-link").innerText= "Login";
 		document.getElementById("register").href = "/register.html"; 
+		document.getElementById("account-link").href = "/login.html"; 
 	}
 	else {
 		document.getElementById("account-link").innerText= "My account";
+		document.getElementById("account-link").href = "/account.html"; 
 		document.getElementById("register").href = "#";
 		if(parseInt(window.localStorage.getItem("notifs")) > 0) {
 			document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";

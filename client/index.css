@@ -1,11 +1,15 @@
 ::-webkit-scrollbar {
   display: none;
 }
-
-body {
+.alert {
+  background-color: #81c784  !important;
+  border-color: #81c784   !important;
+}
+body,html {
   background-color: white !important;
   font-family: "Lato", sans-serif !important;
   font-weight: 300 !important;
+  height: 100%;
 }
 
 h1 {
@@ -37,7 +41,7 @@ table {
     width:100%;
     word-wrap: break-word; 
 }
-td{
+td,tr{
   word-break:break-all;
 }
 
@@ -61,15 +65,26 @@ a[href] {
 }
 
 .logo {
+  /*
   font-size: 510% !important;
-  color: #0288d1 !important;
+  color: #0288d1 !important;*/
+  font-size: 510% !important;
+  color: #ffbb33 !important;
 }
 
 .bg {
-  background: url("files/bg.jpeg") no-repeat !important;
+  
+  /*background: url("files/bg.jpeg") no-repeat !important;
   background-size: cover !important;
-  padding-top: 17% !important;
-  padding-bottom: 15% !important;
+  padding-top: 25vh !important;
+  padding-bottom: 38vh !important;*/
+  background: url("files/cool-background.png") no-repeat !important;
+  background-position: bottom right;
+  background-attachment: fixed;
+  background-size: cover !important;
+  padding-top: 25vh !important;
+  padding-bottom: 38vh !important;
+  min-height: 100% !important;
 }
 
 

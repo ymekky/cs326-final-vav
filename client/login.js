@@ -11,13 +11,14 @@ window.addEventListener("load", async function() {
         method: 'POST',
         body: JSON.stringify({email, password})
 			});
-	    const user = await response.json();
 	    if (!response.ok) {
-	        console.error(user.error);
-	        alert(user.error);
+	        console.error(response.error);
+	        alert("Incorrect email or password.");
 	    }
 	    else {
+	    		const user = await response.json();
 	    		const user_id = user._id;
+	    		user.password = password;
 				console.log('user successfully logged in', user);
 	    		window.localStorage.setItem("logged-in", true);
 				window.localStorage.setItem("me",JSON.stringify(user));
@@ -32,7 +33,6 @@ window.addEventListener("load", async function() {
 				if(!removal.ok){
 					console.error('Couldn\'t remove finished rides');
 				}
-
 				window.location.replace('./index.html');
 	    }
 	});

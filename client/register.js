@@ -12,6 +12,9 @@ window.addEventListener("load", async function() {
     const confirmPassword = document.getElementById("confirmPassword").value;
     if(email === '' || password === '' || name === ''|| confirmPassword === ''){
       return;
+    }else if(!email.match('[A-Za-z0-9_|$|#|+|]+@[a-zA-Z]*[.]*[a-zA-Z]+\.(edu|com|net)')) {
+      console.error("Invalid email.");
+      return;
     }
 
     if(password === confirmPassword){
@@ -25,7 +28,6 @@ window.addEventListener("load", async function() {
       }); 
 
       if(response.ok){
-        alert("We sent an activation link to your email.");
         window.location.replace('./login.html');
         //const user = await response.json();
         //window.localStorage.setItem("logged-in", true);

@@ -297,11 +297,6 @@ MongoClient.connect(uri, {
     res.json({ available: rides });
   });
 
-  // /verify?user_id=12&code=19281783
-  app.get('/verify', async (req,res) => {
-
-  });
-
   //   curl -d '{ "id" : "123", "name" : "jane doe", "email": "jdoe@umass.edu", "password": "123"}' -H "Content-Type: application/json" http://localhost:8000/user/new
   app.post("/user/new", async (req, res) => {
     const id = Math.floor(Math.random() * 10000);
@@ -327,8 +322,7 @@ MongoClient.connect(uri, {
       email: email,
       password: hashedPassword,
       my_rides: {},
-      notifications: [],
-      verified: false,
+      notifications: []
     };
 
     try {
