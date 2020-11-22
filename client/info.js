@@ -80,7 +80,7 @@ window.addEventListener("load", async function() {
 			        return;
 			    }
 			    else {
-			    	alert("Done! Just wait for a notification.");
+			    	alert("We posted your ride! Just wait for a notification.");
 			    }
 			window.localStorage.setItem('search',JSON.stringify({"driver": true, from, to, date, time}));
 			window.location.replace('index.html');

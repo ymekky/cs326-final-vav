@@ -69,7 +69,7 @@ a[href] {
   font-size: 510% !important;
   color: #0288d1 !important;*/
   font-size: 510% !important;
-  color: #ffbb33 !important;
+  color: #ffca28 !important;
 }
 
 
@@ -82,11 +82,9 @@ a[href] {
   padding-bottom: 38vh !important;*/
   background: url("files/cool-background.png") no-repeat !important;
   background-position: bottom right;
-  background-attachment: fixed;
   background-size: cover !important;
   padding-top: 25vh !important;
   padding-bottom: 38vh !important;
-  min-height: 100% !important;
 }
 
 .bg-gradient {
