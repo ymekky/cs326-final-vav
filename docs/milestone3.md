@@ -21,7 +21,18 @@
 	<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; , 
 	<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"notifications": Array &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//user's notifications
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"notifications": Array of { //user's notifications
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; _id: Integer,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //requesting user's id
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; name: String,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //requesting user's name
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; email, String,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //requesting user's email
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; ride_id, Integer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //id of ride being requests
+<br>
+}
+<br>
 }
 <br>
 <br>
