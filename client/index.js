@@ -8,15 +8,18 @@ window.addEventListener('load', async function () {
 	}
 	else {
 		document.getElementById("account-link").innerText= "My account";
-		document.getElementById("register").className = "#"; 
+		document.getElementById("register").href = "#";
+		if(parseInt(window.localStorage.getItem("notifs")) > 0) {
+			document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
+		}
 	}
 
 	document.getElementById("account-link").onclick = () => {
 		if (!logged) {
-			document.getElementById("account-link").href = "/login.html"; 
+			window.location.replace("/login.html"); 
 		}
 		else {
-			document.getElementById("account-link").href = "/account.html";
+			window.location.replace("/account.html"); 
 		}
 	}
 

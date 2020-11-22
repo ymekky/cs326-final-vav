@@ -25,6 +25,7 @@ window.addEventListener("load", async function() {
       }); 
 
       if(response.ok){
+        alert("We sent an activation link to your email.");
         window.location.replace('./login.html');
         //const user = await response.json();
         //window.localStorage.setItem("logged-in", true);

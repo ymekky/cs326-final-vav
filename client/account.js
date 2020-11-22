@@ -47,24 +47,24 @@ window.addEventListener("load", async function() {
 	document.getElementById("nav-request-tab").addEventListener('click', function () {
 		document.getElementById("nav-request-tab").className = "nav-item nav-link active";
 		document.getElementById("nav-current-tab").className = "nav-item nav-link";
-		document.getElementById("nav-past-tab").className = "nav-item nav-link";
+		//document.getElementById("nav-past-tab").className = "nav-item nav-link";
 
 		document.getElementById("requested").className = "tab-pane fade show active";
 		document.getElementById("active-rides").className = "tab-pane fade";
-		document.getElementById("completed").className = "tab-pane fade";
+		//document.getElementById("completed").className = "tab-pane fade";
 	});
 
 	document.getElementById("nav-current-tab").addEventListener('click', function () {
 		document.getElementById("nav-current-tab").className = "nav-item nav-link active";
 		document.getElementById("nav-request-tab").className = "nav-item nav-link";
-		document.getElementById("nav-past-tab").className = "nav-item nav-link";
+		//document.getElementById("nav-past-tab").className = "nav-item nav-link";
 
 		document.getElementById("active-rides").className = "tab-pane fade show active";
 		document.getElementById("requested").className = "tab-pane fade";
-		document.getElementById("completed").className = "tab-pane fade";
+		//document.getElementById("completed").className = "tab-pane fade";
 	});
 
-	document.getElementById("nav-past-tab").addEventListener('click', function () {
+	/*document.getElementById("nav-past-tab").addEventListener('click', function () {
 		document.getElementById("nav-past-tab").className = "nav-item nav-link active";
 		document.getElementById("nav-current-tab").className = "nav-item nav-link";
 		document.getElementById("nav-request-tab").className = "nav-item nav-link";
@@ -72,7 +72,7 @@ window.addEventListener("load", async function() {
 		document.getElementById("completed").className = "tab-pane fade show active";
 		document.getElementById("active-rides").className = "tab-pane fade";
 		document.getElementById("requested").className = "tab-pane fade";
-	});
+	});*/
 
     const response = await fetch(`./user/rides/view?user_id=${user_id}`,{credentials: 'include'}); //change
     if (!response.ok) {
@@ -90,9 +90,10 @@ window.addEventListener("load", async function() {
 			tb.className += " table-bordered table-rides";
 
 			if(rides.pending !== undefined && rides.pending.length > 0) {
-				initializeRides(table, tb);
+				initializeRides(table, tb, true);
+				rides.pending = sortRides(rides.pending);
 				for(let ride of rides.pending) {
-					buildRides(table,tb,ride);
+					buildRides(table,tb,ride, true);
 				}
 			}else {
 				tb.innerText = "None.";
@@ -108,9 +109,10 @@ window.addEventListener("load", async function() {
 			tb.className += " table-bordered table-rides";
 
 			if(rides.active !== undefined && rides.active.length > 0) {
-				initializeRides(table, tb);
+				initializeRides(table, tb, false);
+				rides.active = sortRides(rides.active);
 				for(let ride of rides.active) {
-					buildRides(table,tb,ride);
+					buildRides(table,tb,ride, false);
 				}
 			}else {
 				tb.innerText = "None.";
@@ -118,7 +120,7 @@ window.addEventListener("load", async function() {
 			table.appendChild(tb);
 
 			//-----------------------------------------------
-
+			/*
 			//BUILDING COMPLETED RIDES
 			//-----------------------------------------------
 			table = document.getElementById('completed');
@@ -133,7 +135,7 @@ window.addEventListener("load", async function() {
 			}else {
 				tb.innerText = "None.";
 			}
-			table.appendChild(tb);
+			table.appendChild(tb);*/
     }
 
     const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
@@ -160,8 +162,15 @@ window.addEventListener("load", async function() {
     }
 });
 
-function initializeRides(table, tb) {
-	const titles = ["Route", "ID", "Date", "Time", "Driver", "Contact", ""];
+function initializeRides(table, tb, pending) {
+	let titles;
+	if(pending){
+		titles = ["Route", "ID", "Date", "Time", "Driver", ""];
+	}
+	else{
+		titles = ["Route", "ID", "Date", "Time", "Driver", "Contact", ""];
+	}
+
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
 	tr.className = "table-primary";
@@ -181,7 +190,7 @@ function initializeReqs(table, tb) {
 	const titles = ["Name", "Contact", "Route ID","Confirm"];
 	const thead = document.createElement('thead');
 	const tr = document.createElement('tr');
-	tr.className = "table-primary";
+	tr.className = "table-success";
 
 	for(const title of titles){ 
 		const th = document.createElement('th');
@@ -199,7 +208,7 @@ function initializeReqs(table, tb) {
 	table.appendChild(tb);
 }
 
-function buildRides(table,tb,ride) {
+function buildRides(table,tb,ride, pending) {
 	const tbody = document.createElement('tbody');
 	let tr = document.createElement('tr');
 	let date;
@@ -230,9 +239,12 @@ function buildRides(table,tb,ride) {
 	}
 	tr.appendChild(td);
 
-	td = document.createElement('td');
-	td.innerHTML = '<a href=\"mailto:"' + ride.driver.email + '\">' + ride.driver.email +'</a';
-	tr.appendChild(td);
+	if(!pending){
+		td = document.createElement('td');
+		let message = "Hey! Where should we meet?"
+		td.innerHTML = '<a href=\"mailto:' + ride.driver.email + '?subject=UMassRideshare ' + ride.from + " - " + ride.to + '&body=' + message + '\">' + ride.driver.email +'</a';
+		tr.appendChild(td);
+	}
 
 	let button = document.createElement('button');
 	button.className += "btn btn-danger h-center w-100";
@@ -336,4 +348,24 @@ async function cancel(){
 		return;
 	}
 	location.reload();
+}
+
+function sortRides(rides) {
+	return rides.sort(function(a,b) {return sortHelper(a,b)});
+}
+
+function sortHelper(a,b) {
+    if (a.date > b.date) {
+        return 1;
+    } else if (a.date < b.date) { 
+        return -1;
+    }
+
+    if (a.time < b.time) { 
+        return -1;
+    } else if (a.time > b.time) {
+        return 1
+    } else { 
+        return 0;
+    }
 }

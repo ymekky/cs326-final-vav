@@ -9,7 +9,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="index.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <script type="module" src="info.js" defer></script>
     </head>
@@ -21,16 +24,24 @@
                 </div>
             </div>
         </div>
-         <h1 class="blue-text">Search</h1>
 
-        <form class="container details white-bg shadow-lg p-3 mb-5 bg-white rounded">
+      <div class="mb-0 alert alert-success alert-dismissible fade hide" role="alert" id="alert">
+        <strong>You have a request! Go to your account. </strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+         <!--<h1 class="blue-text">Search</h1>-->
+
+        <form class="container details white-bg shadow-lg p-3 mb-5 bg-white rounded mt-5 pt-5 w-25" onsubmit="return false">
           <div class="form-row">
             <div class="col">
               <div class="form-group">
                 <label for="sel1">What are you looking for?</label>
                 <select class="form-control" id="sel1">
                   <option>looking for a driver</option>
-                  <option>looking for a rider</option>
+                  <option>looking for a passenger</option>
                 </select>
               </div>
             </div>
@@ -77,7 +88,7 @@
               <div class="form-group hide" id="test">
 
                 <label for="time">Preferred Time:</label>
-                <input type="time" id="time" name="time" class="w-100" required>
+                <input type="time" id="time" name="time" class="w-100" aria-required="true" required>
 
               </div>
             </div>
@@ -85,7 +96,7 @@
 
           <div class="form-row">
               <div class="form-group col text-center">
-                <button type="button" class="btn btn-primary h-center" id="search-click" onsubmit="return false">Search</button>
+                <button type="submit" class="btn btn-success h-center" id="search-click">Search</button>
               </div>
           </div>
 

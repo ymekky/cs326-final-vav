@@ -1,2 +1,8 @@
 node_modules
 secrets.json
+.DS_Store~Stashed changes
+client/.DS_Store
+client/files/.DS_Store
+docs/.DS_Store
+scs/
+.DS_Store

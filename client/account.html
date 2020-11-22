@@ -22,9 +22,9 @@
                 </div>
             </div>
         </div>
-        <h1 class="blue-text">My Account</h1>
 
-        <div class="container details white-bg shadow-lg p-3 mb-5 bg-white rounded col-xs-*">
+        <div class="container details white-bg shadow-lg p-3 mt-3 bg-white rounded col-xs-*">
+            <h1 class="blue-text text-left">My Account</h1>
             <div class="form-row">
                 <div class="form-group col">
                     <label for="name">Name:</label>
@@ -46,26 +46,36 @@
                     </div>
                 </div>
             </div>
+            <br>
 
             <nav>
               <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-current-tab" data-toggle="tab" role="tab" aria-controls="nav-current" aria-selected="true">Confirmed</a>
                 <a class="nav-item nav-link" id="nav-request-tab" data-toggle="tab" role="tab" aria-controls="nav-request" aria-selected="false">Requested</a>
-                <a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" role="tab" aria-controls="nav-past" aria-selected="false">Completed</a>
+                <!--<a class="nav-item nav-link" id="nav-past-tab" data-toggle="tab" role="tab" aria-controls="nav-past" aria-selected="false">Completed</a>-->
               </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="active-rides" role="tabpanel" aria-labelledby="nav-current-tab"></div>
               <div class="tab-pane fade" id="requested" role="tabpanel" aria-labelledby="nav-request-tab"></div>
-              <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="nav-past-tab"></div>
+              <!--<div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="nav-past-tab"></div>-->
             </div>
 
             <br>
+            <nav>
+                <div class="nav nav-tabs justify-content-center" id="nav-notif-tabs" role="tablist">
+                    <a class="nav-item nav-link" id="nav-notif-tab" data-toggle="tab" role="tab" aria-controls="nav-notifs" aria-selected="true">Requests</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="notif-tabContent">
+              <div class="tab-pane fade show active" id="notifications" role="tabpanel" aria-labelledby="nav-notif-tab"></div>
+            </div>
+            <!--
             <div class="form-row">
                 <h6 class="tab h-center">Requests:</h6>
             </div>
             <div class="form-row" id="notifications">
-            </div>
+            </div> -->
             <br>
             <div class="form-row">
                 <div class="form-group col text-center">

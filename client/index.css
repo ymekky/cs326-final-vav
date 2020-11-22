@@ -72,6 +72,7 @@ a[href] {
   padding-bottom: 15% !important;
 }
 
+
 .black-bg {
   background-color: black;
 }
@@ -115,8 +116,6 @@ a[href] {
 }
 
 .btn-primary {
-  background-color: green !important;
-  border-color: green !important;
 }
 
 .center {
@@ -165,7 +164,28 @@ a[href] {
   font-size: 1.3em !important;
 }
 
+.nav-item.active {
+  background-color: rgb(188, 220, 252,0.7) !important;
+  border: rgb(188, 220, 252) !important;
+}
+
+#nav-notif-tab{
+  background-color: rgb(196, 228, 204,0.7) !important;
+  border: rgb(196, 228, 204) !important;
+  color: #4d4d4d !important;
+}
+
 .tab {
   color: #0275d8;
 }
 
+.fixed-button {
+  position: absolute;
+  right: 5vw;
+  bottom: 15px;
+}
+
+#error {
+  color: red; 
+  display: none;
+}

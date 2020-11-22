@@ -1,6 +1,4 @@
 require("dotenv").config();
-
-const fs = require("fs");
 const express = require("express");
 const expressSession = require("express-session"); // for managing session state
 const passport = require("passport"); // handles authentication
@@ -28,8 +26,6 @@ function checkLoggedIn(req, res, next) {
   }
 }
 
-
-// Passport configuration
 
 let secrets;
 let uri;
@@ -70,20 +66,19 @@ MongoClient.connect(uri, {
   },
     
     async (email, password, done) => {
-    console.log('here?', email, password);
     const user = await user_collection.findOne({email});
     if (!user) {
       return done(null, false, { message: "Wrong email" });
     }
     if (!miniCrypt.check(password, user.password[0], user.password[1])) {
-      console.log('called2')
+      //console.log('called2')
       // invalid password
       // should disable logins after N messages
       // delay return to rate-limit brute-force attacks
       await new Promise((r) => setTimeout(r, 2000)); // two second delay
       return done(null, false, { message: "Wrong password" });
     }
-    console.log('called3')
+    //console.log('called3')
     // success!
     // should create a user object here, associated with a unique identifier
     return done(null, {_id: user._id, email, name: user.name});
@@ -122,6 +117,7 @@ MongoClient.connect(uri, {
 
   // /user/rides/view?user_id=12
   app.get("/user/rides/view", checkLoggedIn, async function (req, res) {
+
     const user_id = parseInt(req.query.user_id);
     const user = await user_collection.findOne({ _id: user_id });
     let my_rides = {};
@@ -139,17 +135,33 @@ MongoClient.connect(uri, {
     const ride_id = parseInt(req.query.ride_id);
 
     let my_ride = await rides_collection.findOne({ _id: ride_id });
+    console.log(my_ride.time);
+    let possible_conflicts = await user_collection.countDocuments({"_id": user_id, $or : [ {"my_rides.active" : { $elemMatch : {"time": my_ride.time} }}, 
+      {"my_rides.pending" : { $elemMatch : {"time": my_ride.time} }}] }, {limit: 1});
+    console.log(possible_conflicts);
+    if(possible_conflicts > 0){
+      res.status(403).json({error: "conflicting rides"});
+    }
+    else {
 
-    const pending = await user_collection.updateOne(
-      { _id: user_id },
-      { $push: { "my_rides.pending": my_ride } }
-    );
+      try {
+        const pending = await user_collection.updateOne(
+          { _id: user_id },
+          { $push: { "my_rides.pending": my_ride } }
+        );
+        res.sendStatus(200);
+      } catch (e){
+        console.error(e);
+        res.sendStatus(500);
+      }
 
-    res.send(`Added ride ${ride_id} to ${user_id}'s pending rides`);
+    }
+
   });
 
   // /user/rides/active?user_id=12&ride_id=702  //request accepted
   app.get("/user/rides/active", checkLoggedIn, async (req, res) => {
+
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
@@ -166,21 +178,33 @@ MongoClient.connect(uri, {
     res.send(`Added ride ${ride_id} to ${user_id}'s active rides`);
   });
 
-  // /user/rides/completed?user_id=12&ride_id=702 //done
+  // /user/rides/completed?user_id=12 //done
   app.get("/user/rides/completed", checkLoggedIn, async (req, res) => {
     const user_id = parseInt(req.query.user_id);
-    const ride_id = parseInt(req.query.ride_id);
+    const today = new Date().toISOString().slice(0,10); //date in string
+    
+    const removal_1 = await user_collection.updateMany(
+      { _id: user_id },
+      { $pull: { "my_rides.active": {date: {$lt: today} }} }
+    );
 
-    const my_ride = await rides_collection.findOne({ _id: ride_id });
-    await user_collection.updateOne(
+    const removal_2 = await user_collection.updateMany(
       { _id: user_id },
-      { $pull: { "my_rides.active": my_ride } }
+      { $pull: { "my_rides.pending": {date: {$lt: today} }} }
     );
-    await user_collection.updateOne(
+
+    const removal_3 = await user_collection.updateMany(
       { _id: user_id },
-      { $push: { "my_rides.completed": my_ride } }
+      { $pull: { "notifications": {date: {$lt: today} }} }
     );
-    res.send(`Added ride ${ride_id} to ${user_id}'s completed rides`);
+
+
+    if(!removal_1.ok || !removal_2.ok || !removal_3.ok){
+      res.sendStatus(500);
+    }
+    else{
+      res.sendStatus(200);
+    }
   });
 
   // /user/rides/delete?user_id=12&ride_id=702
@@ -273,6 +297,11 @@ MongoClient.connect(uri, {
     res.json({ available: rides });
   });
 
+  // /verify?user_id=12&code=19281783
+  app.get('/verify', async (req,res) => {
+
+  });
+
   //   curl -d '{ "id" : "123", "name" : "jane doe", "email": "jdoe@umass.edu", "password": "123"}' -H "Content-Type: application/json" http://localhost:8000/user/new
   app.post("/user/new", async (req, res) => {
     const id = Math.floor(Math.random() * 10000);
@@ -299,6 +328,7 @@ MongoClient.connect(uri, {
       password: hashedPassword,
       my_rides: {},
       notifications: [],
+      verified: false,
     };
 
     try {
