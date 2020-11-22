@@ -1,4 +1,3 @@
-#Setup
+# Setup
 
-You only need to download the github file, go to the directory in terminal, and type "npm i" and then "npm start".
-Or use the heroku link.
+You only need this heroku link: https://enigmatic-garden-25331.herokuapp.com/. Then register and use the app!
