@@ -1,49 +1,51 @@
-#Documentation
+# Documentation
 -----------
 <br>
-user document 
+
 <br>
-{"_id": Integer,
+{
 <br>
-"name": String, &nbsp; //name of user
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"_id": Integer,
 <br>
-"email": String, &nbsp; //email of user
-<br>
-"password":[salt,hash], &nbsp; &nbsp; //encrypted password of user
-<br>
-"my_rides": &nbsp; &nbsp; //user's rides
-<br>
-&nbsp; &nbsp; &nbsp; {"active" : Array //user's active rides
-<br>
-&nbsp; &nbsp; &nbsp; "pending": Array //user's pending (requested) rides
-<br>
-&nbsp; &nbsp; &nbsp; , 
-<br>
-"notifications": Array &nbsp; //user's notifications
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": String, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //name of user
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"email": String, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//email of user
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"password":[salt,hash], &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//encrypted password of user
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"my_rides": &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //user's rides
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; {"active" : Array &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //user's active rides
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; "pending": Array &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //user's pending (requested) rides
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; , 
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"notifications": Array &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//user's notifications
 }
 <br>
 <br>
 ride document
 <br>
-{"_id": Integer,
+{
 <br>
-"date": String &nbsp; //date of ride
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "_id": Integer,
 <br>
-"time": String, &nbsp; //time of ride
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "date": String &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//date of ride
 <br>
-"from": String,  &nbsp; //starting location
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "time": String, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//time of ride
 <br>
-"to": String, &nbsp; //final destination
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "from": String,  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //starting location
 <br>
-"driver":
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "to": String, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//final destination
 <br>
-	{"_id": Integer, &nbsp; //id of user driver (as above)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "driver":
 <br>
-	"name": String, &nbsp; //name of user driver (as above)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; {"_id": Integer, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //id of user driver (as above)
 <br>
-	"email":"ymekky@umass.edu" &nbsp; //email of user driver (as above)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;"name": String, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//name of user driver (as above)
 <br>
-	}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;"email":"ymekky@umass.edu" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//email of user driver (as above)}
 <br>
 }
 <br>
@@ -52,16 +54,17 @@ session document
 <br>
 {
 <br>
-"_id":String,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "_id":String,
 <br>
-"expires": Date, 	&nbsp; //date of session's expiry
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "expires": Date, 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//date of session's expiry
 <br>
-"session": Object   &nbsp; //produced by py passport-local
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "session": Object   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//produced by py passport-local
 <br>
 }
 <br>
 
-#Division of labour
+# Division of labour
+-----------
 <br>
 Alishba - MongoDB, Completing notifications (/notify, /notifs), matching user with rides, and showing notifications in front-end, User authentication
 <br>
