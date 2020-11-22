@@ -33,6 +33,8 @@ window.addEventListener("load", async function() {
 		document.getElementById('date').value = past_search.date;
 	}
 
+	document.getElementById("back").onclick = () => {window.location.replace("/index.html")};
+
 	document.getElementById('sel1').onchange = () => {
 		if(document.getElementById('sel1').value === 'looking for a passenger') {
 			document.getElementById('sel2-label').innerHTML = '';
