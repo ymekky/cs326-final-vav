@@ -3,6 +3,8 @@ window.addEventListener("load", async function() {
 
 	if(parseInt(window.localStorage.getItem("notifs")) > 0) {
 			document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
+			window.localStorage.setItem("notifs", 0);
+
 	}
 
 	document.getElementById("nav-logout").addEventListener('click', function () {

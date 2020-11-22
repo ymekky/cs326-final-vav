@@ -13,6 +13,7 @@ window.addEventListener('load', async function () {
 		document.getElementById("register").href = "#";
 		if(parseInt(window.localStorage.getItem("notifs")) > 0) {
 			document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
+			window.localStorage.setItem("notifs", 0);
 		}
 	}
 

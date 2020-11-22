@@ -6,6 +6,7 @@ window.addEventListener("load", async function() {
 
 	if(parseInt(window.localStorage.getItem("notifs")) > 0) {
 		document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
+		window.localStorage.setItem("notifs", 0);
 	}
 	//reloads past search
 	if(past_search !== null || past_search !== undefined){
