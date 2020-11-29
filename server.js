@@ -7,22 +7,20 @@ const LocalStrategy = require("passport-local").Strategy; // username/password s
 const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
-const utils = require("./database");
 const cors = require("cors");
 const port = process.env.PORT || 8080;
 const mc = require("./miniCrypt");
 const miniCrypt = new mc();
 
-var MongoDBStore = require('connect-mongodb-session')(expressSession);
+const MongoDBStore = require('connect-mongodb-session')(expressSession);
 
 function checkLoggedIn(req, res, next) {
-  console.log(req.user, req.isAuthenticated());
   if (req.isAuthenticated()) {
     // If we are authenticated, run the next route.
     next();
   } else {
     // Otherwise, redirect to the login page.
-    res.redirect("/loginpage");
+    res.redirect(401);
   }
 }
 
@@ -35,7 +33,7 @@ if (!process.env.URI) {
 } else {
   uri = process.env.URI;
 }
-var store = new MongoDBStore({
+const store = new MongoDBStore({
   uri: uri,
   collection: 'sessions'
 });
@@ -49,7 +47,6 @@ const session = {
 };
 
 const MongoClient = require("mongodb").MongoClient;
-const ObjectId = require("mongodb").ObjectId;
 MongoClient.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -58,8 +55,6 @@ MongoClient.connect(uri, {
   const db = client.db("umass-ride");
   const user_collection = db.collection("users");
   const rides_collection = db.collection("rides");
-  const driver_collection = db.collection("drivers");
-  const notifications_collection = db.collection("notifications");
   const strategy = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -71,14 +66,12 @@ MongoClient.connect(uri, {
       return done(null, false, { message: "Wrong email" });
     }
     if (!miniCrypt.check(password, user.password[0], user.password[1])) {
-      //console.log('called2')
       // invalid password
       // should disable logins after N messages
       // delay return to rate-limit brute-force attacks
       await new Promise((r) => setTimeout(r, 2000)); // two second delay
       return done(null, false, { message: "Wrong password" });
     }
-    //console.log('called3')
     // success!
     // should create a user object here, associated with a unique identifier
     return done(null, {_id: user._id, email, name: user.name});
@@ -108,10 +101,9 @@ MongoClient.connect(uri, {
     res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/register.html"));
   });
-  app.get("/account", (req, res) => {
-    //res.header('Access-Control-Allow-Credentials', true);
+  app.get("/account", checkLoggedIn, (req, res) => {
+    res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/account.html"));
-    console.log('here? account', req.user);
     res.status(200).json(req.user);
   });
 
@@ -134,18 +126,17 @@ MongoClient.connect(uri, {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = await rides_collection.findOne({ _id: ride_id });
-    console.log(my_ride.time);
-    let possible_conflicts = await user_collection.countDocuments({"_id": user_id, $or : [ {"my_rides.active" : { $elemMatch : {"time": my_ride.time} }}, 
+    const my_ride = await rides_collection.findOne({ _id: ride_id });
+    const possible_conflicts = await user_collection.countDocuments({"_id": user_id, $or : [ {"my_rides.active" : { $elemMatch : {"time": my_ride.time} }}, 
       {"my_rides.pending" : { $elemMatch : {"time": my_ride.time} }}] }, {limit: 1});
-    console.log(possible_conflicts);
+
     if(possible_conflicts > 0){
       res.status(403).json({error: "conflicting rides"});
     }
     else {
 
       try {
-        const pending = await user_collection.updateOne(
+        await user_collection.updateOne(
           { _id: user_id },
           { $push: { "my_rides.pending": my_ride } }
         );
@@ -165,7 +156,7 @@ MongoClient.connect(uri, {
     const user_id = parseInt(req.query.user_id);
     const ride_id = parseInt(req.query.ride_id);
 
-    let my_ride = await rides_collection.findOne({ _id: ride_id });
+    const my_ride = await rides_collection.findOne({ _id: ride_id });
     await user_collection.updateOne(
       { _id: user_id },
       { $pull: { "my_rides.pending": my_ride } }
@@ -219,24 +210,30 @@ MongoClient.connect(uri, {
         {},
         { $pull: { "my_rides.active": { _id: ride_id } } }
       ); //removes ride from everyone's existing rides
+
       await user_collection.updateMany(
         {},
         { $pull: { "my_rides.pending": { _id: ride_id } } }
       );
+
       await rides_collection.deleteOne({ _id: ride_id });
+
       await user_collection.updateOne(
         { _id: my_ride.driver._id },
         { $pull: { notifications: { ride_id: ride_id } } }
       ); //remove notification for driver
+
     } else {
       await user_collection.updateOne(
         { _id: user_id },
         { $pull: { "my_rides.active": { _id: ride_id } } }
       );
+
       await user_collection.updateOne(
         { _id: user_id },
         { $pull: { "my_rides.pending": { _id: ride_id } } }
       );
+
       await user_collection.updateOne(
         { _id: my_ride.driver._id },
         { $pull: { notifications: { _id: user_id } } }
@@ -276,13 +273,13 @@ MongoClient.connect(uri, {
       driver: driver,
     };
     try{
-      const returnedRide = await rides_collection.insertOne(ride);
+      await rides_collection.insertOne(ride);
     } catch(e) {
       console.error(e);
       res.sendStatus(500);
     }
     try{
-      const newRide = await user_collection.updateOne({ "_id": driver._id }, { $push: { "my_rides.active": ride } } );
+      await user_collection.updateOne({ "_id": driver._id }, { $push: { "my_rides.active": ride } } );
     } catch (e){
       console.error(e);
       res.sendStatus(500);
@@ -316,7 +313,7 @@ MongoClient.connect(uri, {
 
     const hashedPassword = miniCrypt.hash(password);
 
-    let user = {
+    const user = {
       _id: id,
       name: name,
       email: email,
@@ -327,7 +324,6 @@ MongoClient.connect(uri, {
 
     try {
       user_collection.insertOne(user);
-      //res.json({ me: user, success: true });
       res.redirect('/login.html');
     } catch (e) {
       console.error(e);
@@ -340,10 +336,9 @@ MongoClient.connect(uri, {
     const user_id = parseInt(req.query.user_id);
     const newpwd = req.query.new;
     const hashedPassword = miniCrypt.hash(newpwd);
-    const user = await user_collection.findOne({ _id: user_id });
 
     try {
-      let user = await user_collection.updateOne(
+      await user_collection.updateOne(
         { _id: user_id },
         { $set: { password: hashedPassword } }
       );
@@ -355,7 +350,6 @@ MongoClient.connect(uri, {
 
   app.post('/login', passport.authenticate('local', { successRedirect: '/account', failureRedirect: '/login' }));
   app.get('/logout', checkLoggedIn, function(req, res){
-    console.log('logout');
     req.logout();
     res.sendStatus(200);
   });
@@ -365,7 +359,6 @@ MongoClient.connect(uri, {
     const from = parseInt(req.query.from);
     const to = parseInt(req.query.to);
     const ride_id = parseInt(req.query.ride_id);
-    console.log(from, to, ride_id);
     const me = await user_collection.findOne({ _id: from });
     await user_collection.updateOne(
       { _id: to },

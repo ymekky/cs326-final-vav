@@ -6,18 +6,21 @@ window.addEventListener("load", async function() {
   }
 
 	document.getElementById("register-click").addEventListener('click', async function () {
+
 		const email = document.getElementById("email").value;
 		const password = document.getElementById("password").value;
 		const name = document.getElementById("name").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
+
     if(email === '' || password === '' || name === ''|| confirmPassword === ''){
       return;
-    }else if(!email.match('[A-Za-z0-9_|$|#|+|]+@[a-zA-Z]*[.]*[a-zA-Z]+\.(edu|com|net)')) {
-      alert("Invalid email.");
+
+    }else if(!email.match('[A-Za-z0-9_|$|#|+|]+@[a-zA-Z]*[.]*[a-zA-Z]+.(edu|com|net)')) {
       return;
     }
 
     if(password === confirmPassword){
+      
       const response = await fetch(`./user/new`, {
         headers: {
           'Accept': 'application/json',
@@ -29,11 +32,6 @@ window.addEventListener("load", async function() {
 
       if(response.ok){
         window.location.replace('./login.html');
-        //const user = await response.json();
-        //window.localStorage.setItem("logged-in", true);
-        //window.localStorage.setItem("me",JSON.stringify(user.me));
-        //window.location.replace('./account.html');
-        //console.log('User Successfully Created', user); 
       }
       else if(response.status === 403) {
         alert("This email already exists.");
