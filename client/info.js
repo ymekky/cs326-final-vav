@@ -3,6 +3,12 @@ window.addEventListener("load", async function() {
     const today = day.toISOString().slice(0, 10);
     const past_search = JSON.parse(window.localStorage.getItem("search"));
     document.getElementById("date").setAttribute('min', today);
+    const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
+
+    if(notifs.ok){
+        const notifications = await notifs.json();
+        window.localStorage.setItem("notifs", notifications.length);
+    }
     
     if(day.getHours() < 10){
         document.getElementById("time").setAttribute('min', "0" + day.getHours() + ":" + day.getMinutes());

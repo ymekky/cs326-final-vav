@@ -93,14 +93,7 @@ MongoClient.connect(uri, {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cors({ credentials: true}));
-  app.get("/loginpage", (req, res) => {
-    res.header('Access-Control-Allow-Credentials', true);
-    res.sendFile(path.join(__dirname + "/client/login.html"));
-  });
-  app.get("/register", (req, res) => {
-    res.header('Access-Control-Allow-Credentials', true);
-    res.sendFile(path.join(__dirname + "/client/register.html"));
-  });
+
   app.get("/account", checkLoggedIn, (req, res) => {
     res.header('Access-Control-Allow-Credentials', true);
     res.sendFile(path.join(__dirname + "/client/account.html"));

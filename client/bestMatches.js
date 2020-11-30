@@ -1,4 +1,10 @@
 window.addEventListener("load", async function() {
+    const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
+
+    if(notifs.ok){
+        const notifications = await notifs.json();
+        window.localStorage.setItem("notifs", notifications.length);
+    }
 
     if(parseInt(window.localStorage.getItem("notifs")) > 0) {
             document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
