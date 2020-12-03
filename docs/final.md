@@ -44,45 +44,85 @@ Alishba Khalil (github: alishbakhalil)
 | /notifs                   | returns the array of notifications for User <br> EXAMPLE: */notifs?id={user id}*                                                                                   |
 ### Database:
 User Document
+<br>
 {
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer,
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "name": String, //name of user
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "email": String, //email of user
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "password": [salt,hash] //encrypted password of user
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "my_rides": //user's rides
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "active" : Array of Ride documents //user's active rides
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "pending": Array of Ride documents //user's pending (requested) rides
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "notifications": Array of Objects. Each object looks like this: //user's notifications
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; _id: Integer,//requesting user's id
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; name: String,//requesting user's name
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; email, //requesting user's email
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ride_id: Integer //id of ride being requested
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+<br>
 }
+<br>
+<br>
 
 Ride Document (belongs to users)
+<br>
 {
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer,
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "date": String //date of ride
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "time": String, //time of ride
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "from": String,  //starting location
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "to": String, //final destination
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "driver":
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer, //id of user driver (as above)
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "name": String, //name of user driver (as above)
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  "email":"ymekky@umass.edu"//email of user driver (as above)}
+<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+<br>
+<br>
 
 Session Document
+<br>
 {
+<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "_id": String,
+<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "expires": Date,   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//date of session's expiry
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "session": Object   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//produced by py passport-local
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "session": Object   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//produced by passport-local
+<br>
 }
+<br>
+<br>
 
 ### URL Routes/Mappings:
 |                                                                   |                                                                                                   |
