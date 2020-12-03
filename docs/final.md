@@ -2,39 +2,97 @@
 ## UMassRideshare: https://enigmatic-garden-25331.herokuapp.com
 ### FALL 2020
 ### Overview: 
-For those living in the UMass area, it can get complicated to find a ride to the surrounding airports. Especially for out-of-state and international students who don’t have family to pick them up. UMass Rideshare provides residents in the UMass area with an easy way to share a ride to or from Boston Logan, Bradley International, or JFK Airport (practically for free). Right now, students normally have to ask around on the UMass facebook group for a ride. Our app innovates by making rideshare possible with just a couple of clicks.
+Our app is a rideshare app which we have created for the use of UMASS Students. This app would allow students to search for a ride or offer a ride to and from various airports and UMASS. It is unique as it is specifically designed to make the rideshare process easier than what it is now and it is specifically tailored to UMASS students needs. As of now whenever students need a ride or offer rides they make posts on social media to try and find someone to share a ride with. This is inefficient as posts get lost and it is hard to find people who are leaving at the same time as you. Our app makes this easier with our search and request feature. 
 
-There are two types of users: a driver and a passenger. A user can be both at the same time, but not for the same ride. After signing up, the user inputs a route, date, and time, and searches for a ride. If the user is a passenger, they’ll get a list of matches based on their input, and can request a ride. If the user is a driver, they just have to wait for a notification for a request. After confirmation, the users can contact each other and complete their rides. 
+There are two types of users: a driver and a passenger. A user can be both at the same time, but not for the same ride. After signing up, the user inputs a route, date, and time, and searches for a ride. If the user is a passenger, they’ll get a list of matches based on their input, and can request a ride. If the user is a driver, they just have to wait for a notification for a request. After confirmation, the users can contact each other and complete their rides!
 
-## Team Members: 
+### Team Members: 
 Yasmeen Mekky (github: ymekky)
-Alishba Khalil
-# User Interface: 
-|                                 	|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         	|
-|---------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Register                        	| The user registers here. This creates a user in the database. <br> ![Registration View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/regview.png)                                                                                                                                                                                                                                                                                                                                                                                                                           	|
-| Login                           	| The user logs in here. This validates a user in the database. <br> ![Login View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/loginview.png)                                                                                                                                                                                                                                                                                                                                                                                                                           	|
-| Find a Ride (search)            	| The user inputs their ride information (passenger or driver, starting location and destination, date, and time).<br>This is used to create a ride (if a driver) or return a list of matches (if a passenger). <br> ![Search View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/searchview2.png)                                                                                                                                                                                                                                                                           	|
-| Matches and requests            	| Passengers only: this retrieves the best matches for the ride search.<br>If there are no rides available on the chosen day, it will return the rides available in the next 6 days (if any). <br>The rides are sorted by date and time.<br><br>The user picks a ride and ‘requests’ it. The driver will be notified, and accepts or rejects it.<br>Meanwhile, the requested ride will be ‘requested’/’pending’ for the passenger. <br> ![Match View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/matchesview.png)                                                        	|
-| My account and all its features 	| A user accesses his/her confirmed and requested rides here.<br>They can cancel their requests, or an already confirmed ride.<br>The rides are sorted by type, date, and time. The table provides the user with the necessary information about the ride, including a clickable contact email, with the subject and message already filled out.<br><br>A driver (who posted a ride) can also accept/reject requests for their ride here.<br><br>The user can also change their password. <br> ![Account View 1](https://github.com/ymekky/cs326-final-vav/blob/main/docs/accview1.png) <br> ![Account View 2](https://github.com/ymekky/cs326-final-vav/blob/main/docs/accview2.png) 	|
-| Notifications/alerts on request 	| Throughout the app, the user can get ‘live’ notifications (on refresh) for a request. This makes the user experience smoother. <br> ![Notification View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/notifview.png)                                                                                                                                                                                                                                                                                                                                                          	|
-| Other                           	|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         	|
-|                                 	|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         	| 
+Alishba Khalil (github: alishbakhalil)
+### User Interface: 
+|                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|---------------------------------  |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  |
+| Register                          | The user registers here. This creates a user in the database. <br> ![Registration View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/regview.png)                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Login                             | The user logs in here. This validates a user in the database. <br> ![Login View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/loginview.png)                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| Find a Ride (search)              | The user inputs their ride information (passenger or driver, starting location and destination, date, and time).<br>This is used to create a ride (if a driver) or return a list of matches (if a passenger). <br> ![Search View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/searchview2.png)                                                                                                                                                                                                                                                                               |
+| Matches and requests              | Passengers only: this retrieves the best matches for the ride search.<br>If there are no rides available on the chosen day, it will return the rides available in the next 6 days (if any). <br>The rides are sorted by date and time.<br><br>The user picks a ride and ‘requests’ it. The driver will be notified, and accepts or rejects it.<br>Meanwhile, the requested ride will be ‘requested’/’pending’ for the passenger. <br> ![Match View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/matchesview.png)                                                         |
+| My account and all its features   | A user accesses his/her confirmed and requested rides here.<br>They can cancel their requests, or an already confirmed ride.<br>The rides are sorted by type, date, and time. The table provides the user with the necessary information about the ride, including a clickable contact email, with the subject and message already filled out.<br><br>A driver (who posted a ride) can also accept/reject requests for their ride here.<br><br>The user can also change their password. <br> ![Account View 1](https://github.com/ymekky/cs326-final-vav/blob/main/docs/accview1.png) <br> ![Account View 2](https://github.com/ymekky/cs326-final-vav/blob/main/docs/accview2.png)   |
+| Notifications/alerts on request   | Throughout the app, the user can get ‘live’ notifications (on refresh) for a request. This makes the user experience smoother. <br> ![Notification View](https://github.com/ymekky/cs326-final-vav/blob/main/docs/notifview.png)                                                                                                                                                                                                                                                                                                                                                              |
+| Main Page                             |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|                                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 
 
 ### APIs: 
-copy from milestone2 but removed /ride/delete 
-New: /user/password, /login /logout, /register, /account
-Edited: /denotify?from=123&to=321&ride_id=232
-Database: same as milestone3. Add relationships
+|                           |                                                                                                                                                                   |
+|-----------------------    |---------------------------------------------------------------------------------------------------------------------------------------------------------------    |
+| /user/new                 | makes new User object <br> *POST input:'{ "id" : "123", "name" : "jane doe", "email": "jdoe@umass.edu", "password": "123"}')*                                       |
+| /login                    | allows User to login via Passport authentication <br> EXAMPLE: *POST body: '{email, password}';                                                                    |
+| /logout                   | allows User to login via Passport                                                                                                                                 |
+| /account                  | redirects User to account page                                                                                                                                    |
+| /user/password            | allows User to change password                                                                                                                                    |
+|                           |                                                                                                                                                                   |
+| /user/rides/view          | returns active, pending, and completed rides of User in the form {Active: , Pending: [], Completed: []} <br>EXAMPLE: *GET input: /user/rides/view?user_id=12)*     |
+| /user/rides/pending       | creates new, pending Ride for User <br> EXAMPLE: *GET input: /user/rides/pending?user_id=12&ride_id=702*                                                            |
+| /user/rides/active        | creates new active Ride from existing pending ride of User <br> EXAMPLE: *user/rides/active?user_id=12&ride_id=702)*                                                |
+| /user/rides/completed     | creates new completed Ride from existing active ride of User <br> EXAMPLE: */user/rides/completed?user_id=12&ride_id=702*                                           |
+| /user/rides/delete        | cancels pending or active Ride of User <br> EXAMPLE: */user/rides/delete?user_id=12&ride_id=702*                                                                    |
+|                           |                                                                                                                                                                   |
+| /ride/new                 | makes new Ride Object <br> EXAMPLE POST body: *{"user_id" : "123", "ride_id" : "232", "date": "12/02/2020", "time": "2:30PM","name":"JSJ"}*                         |
+| /rides/view               | gets all rides in database <br> EXAMPLE: */rides/view*                                                                                                             |
+|                           |                                                                                                                                                                   |
+| /notify                   | notifies other User of request/confirmation <br> EXAMPLE *GET input: /notify?from={id}&to={id}*                                                                    |
+| /denotify                 | removes notification <br> EXAMPLE GET *input: /notify?from={id}&to={id}&ride_id={rideid}*                                                                           |
+| /notifs                   | returns the array of notifications for User <br> EXAMPLE: */notifs?id={user id}*                                                                                   |
+### Database:
+User Document
+{
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer,
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "name": String, //name of user
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "email": String, //email of user
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "password": [salt,hash] //encrypted password of user
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "my_rides": //user's rides
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "active" : Array of Ride documents //user's active rides
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "pending": Array of Ride documents //user's pending (requested) rides
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "notifications": Array of Objects. Each object looks like this: //user's notifications
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; _id: Integer,//requesting user's id
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; name: String,//requesting user's name
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; email, //requesting user's email
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ride_id: Integer //id of ride being requested
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+}
+
+Ride Document (belongs to users)
+{
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer,
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "date": String //date of ride
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "time": String, //time of ride
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "from": String,  //starting location
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "to": String, //final destination
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "driver":
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "_id": Integer, //id of user driver (as above)
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "name": String, //name of user driver (as above)
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  "email":"ymekky@umass.edu"//email of user driver (as above)}
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }
+
+Session Document
+{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "_id": String,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "expires": Date,   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//date of session's expiry
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "session": Object   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//produced by py passport-local
+}
+
 ### URL Routes/Mappings:
-|                                                               	|                                                                                                	|
-|---------------------------------------------------------------	|------------------------------------------------------------------------------------------------	|
-| https://enigmatic-garden-25331.herokuapp.com/login.html       	| Used to view the login page. Anyone can access.                                                	|
-| https://enigmatic-garden-25331.herokuapp.com/register.html    	| Used to view the registration page. Anyone can access.                                         	|
-| https://enigmatic-garden-25331.herokuapp.com/index.html       	| Used to view the main page. Anyone can access, but only those logged in can see notifications. 	|
-| https://enigmatic-garden-25331.herokuapp.com/account.html     	| Used to view account and ride information. Only registered users can access.                   	|
-| https://enigmatic-garden-25331.herokuapp.com/info.html        	| Used to search for a ride. Only registered users can access.                                   	|
-| https://enigmatic-garden-25331.herokuapp.com/bestMatches.html 	| Used to view matched rides. Only registered users can access.                                  	|
+|                                                                   |                                                                                                   |
+|---------------------------------------------------------------    |------------------------------------------------------------------------------------------------   |
+| https://enigmatic-garden-25331.herokuapp.com/login.html           | Used to view the login page. Anyone can access.                                                   |
+| https://enigmatic-garden-25331.herokuapp.com/register.html        | Used to view the registration page. Anyone can access.                                            |
+| https://enigmatic-garden-25331.herokuapp.com/index.html           | Used to view the main page. Anyone can access, but only those logged in can see notifications.    |
+| https://enigmatic-garden-25331.herokuapp.com/account.html         | Used to view account and ride information. Only registered users can access.                      |
+| https://enigmatic-garden-25331.herokuapp.com/info.html            | Used to search for a ride. Only registered users can access.                                      |
+| https://enigmatic-garden-25331.herokuapp.com/bestMatches.html     | Used to view matched rides. Only registered users can access.                                     |
 
 ### Authentication/Authorization:
 Users must be registered and are authenticated on login through passport. All CRUD operations required to use the account and matches pages also require authentication. Without authentication, only the main, login, and registration pages will be available.  
@@ -66,4 +124,4 @@ Users must be registered and are authenticated on login through passport. All CR
         - /user/new , /notify, /notifs
 
 ### Conclusion:
-This project was extremely challenging but we learned a lot. Through the process, we learned how data interacts between the frontend and backend. Our partner, Xiawoei, couldn’t contribute to this project, so we had to build the entire project as just a team of two, which was really stressful. Because of that, we had to sacrifice some features, like a chat. Additionally, we would’ve liked to verify umass students, but it turned out we have to pay for a student validation API to do so (we wish we realized this before). It made us learn the limitations of our resources. It was also really hard and unfair for one person to do 70% of the work in this project
+This project was extremely challenging but we learned a lot. Throughout the project, we learned how data interacts between the frontend and backend, how important the UI is for user interaction, how to make a useful API, and the process of testing. We also learned the importance of effectively seperating duties in each milestone. Because of our missing partner, we had to scale down and sacrifice some useful features, like a chat. Additionally, we would’ve liked to verify umass students, but it turned out we have to pay for a student validation API to do so (we wish we realized this before). We learned the limitations of our resources. Technical challenges we encountered include making our app more responsive and improving its performance. 
