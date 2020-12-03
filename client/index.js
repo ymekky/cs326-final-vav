@@ -14,6 +14,13 @@ window.addEventListener('load', async function () {
 		document.getElementById("account-link").href = "/account.html"; 
 		document.getElementById("register").href = "#";
 
+		const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
+		const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
+        if(notifs.ok){
+            const notifications = await notifs.json();
+            window.localStorage.setItem("notifs", notifications.length);
+        }
+
 		if(parseInt(window.localStorage.getItem("notifs")) > 0) {
 			document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
 			window.localStorage.setItem("notifs", 0);

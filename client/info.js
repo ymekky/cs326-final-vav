@@ -1,7 +1,8 @@
 window.addEventListener("load", async function() {
+	const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
     const day = new Date();
     const today = day.toISOString().slice(0, 10);
-    const past_search = JSON.parse(window.localStorage.getItem("search"));
+    let past_search = JSON.parse(window.localStorage.getItem("search"));
     document.getElementById("date").setAttribute('min', today);
     const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
 
@@ -22,6 +23,11 @@ window.addEventListener("load", async function() {
         document.getElementById('alert').className = "mb-0 alert alert-success alert-dismissible fade show";
         window.localStorage.setItem("notifs", 0);
     }
+    if(past_search === null ){
+    	past_search = {"driver": null, "from": null, "to": null, "date": null, "time": null};
+    	window.localStorage.setItem('search',JSON.stringify(past_search));
+    }
+    console.log(past_search);
     //reloads past search
     if(past_search !== null || past_search !== undefined){
 

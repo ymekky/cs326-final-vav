@@ -26,13 +26,6 @@ window.addEventListener("load", async function() {
 
                 window.localStorage.setItem("logged-in", true);
                 window.localStorage.setItem("me",JSON.stringify(user));
-
-                const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
-
-                if(notifs.ok){
-                    const notifications = await notifs.json();
-                    window.localStorage.setItem("notifs", notifications.length);
-                }
  
                 const removal = await fetch('./user/rides/completed?user_id=' + user_id); //removes rides past date
                 

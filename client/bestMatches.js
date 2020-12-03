@@ -1,4 +1,5 @@
 window.addEventListener("load", async function() {
+    const user_id = JSON.parse(window.localStorage.getItem("me"))._id;
     const notifs = await fetch('./notifs?id=' + user_id,{credentials: 'include'});
 
     if(notifs.ok){
